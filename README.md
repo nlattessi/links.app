@@ -13,10 +13,10 @@
 * Auth
 
 ### Todo
-* ~Bootstraping app~
-* ~Deploy to Heroku~
-* ~Integrate Codeship~
-* GET /links
+* ~~Bootstraping app~~
+* ~~Deploy to Heroku~~
+* ~~Integrate Codeship~~
+* ~~GET /links~~
 * CREATE /links
 * GET /links/{id}
 * UPDATE /links/{id}
