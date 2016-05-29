@@ -23,9 +23,9 @@ $app = new Laravel\Lumen\Application(
     realpath(__DIR__.'/../')
 );
 
-// $app->withFacades();
+$app->withFacades();
 
-// $app->withEloquent();
+$app->withEloquent();
 
 /*
 |--------------------------------------------------------------------------
@@ -100,7 +100,8 @@ $app->group(['namespace' => 'App\Http\Controllers'], function ($app) {
 $stderr = env('APP_STDERR', false);
 if ($stderr === true) {
     $app->configureMonologUsing(function($monolog) {
-        $monolog->pushHandler(new StreamHandler('php://stderr', Logger::WARNING));
+        //$monolog->pushHandler(new StreamHandler('php://stderr', Logger::WARNING));
+        $monolog->pushHandler(new \Monolog\Handler\ErrorLogHandler());
         return $monolog;
     });
 }
