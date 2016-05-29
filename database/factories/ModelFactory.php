@@ -17,3 +17,11 @@ $factory->define(App\User::class, function ($faker) {
         'email' => $faker->email,
     ];
 });
+
+$factory->define(App\Link::class, function ($faker) {
+    return [
+        'title' => $faker->domainName,
+        'url' => $faker->url,
+        'description' => $faker->sentence,
+    ];
+});
