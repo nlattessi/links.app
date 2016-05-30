@@ -97,12 +97,4 @@ $app->group(['namespace' => 'App\Http\Controllers'], function ($app) {
     require __DIR__.'/../app/Http/routes.php';
 });
 
-$stderr = env('APP_STDERR', false);
-if ($stderr === true) {
-    $app->configureMonologUsing(function($monolog) {
-        $monolog->pushHandler(new StreamHandler('php://stderr', Logger::WARNING));
-        return $monolog;
-    });
-}
-
 return $app;
