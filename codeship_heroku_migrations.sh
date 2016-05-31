@@ -1,6 +1,7 @@
 #!/bin/sh
 # This codeship custom script depends on:
 # - API_KEY env var from Heroku
+# From http://tech.yunojuno.com/custom-codeship-deployment-scripts
 set -e
 
 export HEROKU_API_KEY="${API_KEY}"
