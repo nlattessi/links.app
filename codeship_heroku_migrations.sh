@@ -10,6 +10,8 @@ APP_NAME="dry-shore-86449"
 
 APP_URL="${APP_NAME}.herokuapp.com"
 
+echo "${HEROKU_API_KEY},${APP_NAME},${APP_URL}"
+
 # Turn on Heroku maintenance mode
 heroku maintenance:on --app ${APP_NAME}
 
