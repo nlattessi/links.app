@@ -30,4 +30,11 @@ class GetLinkTest extends TestCase
                 'updated_at' => $link->updated_at->toDateTimeString(),
             ]);
     }
+
+    public function testGet404IfNotExistsLink()
+    {
+        $this
+            ->get('links/999')
+            ->seeStatusCode(404);
+    }
 }
