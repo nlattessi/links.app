@@ -17,6 +17,7 @@ class GetLinksTest extends TestCase
         foreach ($links as $link) {
             $this
                 ->seeInDatabase('links', [
+                    'id' => $link->id,
                     'title' => $link->title,
                     'url' => $link->url,
                     'description' => $link->description,
@@ -24,6 +25,7 @@ class GetLinksTest extends TestCase
                     'updated_at' => $link->updated_at,
                 ])
                 ->seeJson([
+                    'id' => $link->id,
                     'title' => $link->title,
                     'url' => $link->url,
                     'description' => $link->description,

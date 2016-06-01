@@ -10,4 +10,9 @@ class LinksController extends Controller
     {
         return Link::all();
     }
+
+    public function show($id)
+    {
+        return Link::findOrFail($id);
+    }
 }
