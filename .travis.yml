@@ -1,14 +1,12 @@
 language: php
-
 php:
-  - 5.5.9
-  - 5.5
-  - 5.6
-  - 7.0
-  - hhvm
-
+- 7.0
 sudo: false
-
 install: travis_retry composer install --no-interaction --prefer-source
-
 script: vendor/bin/phpunit
+deploy:
+  provider: heroku
+  api_key:
+    secure: v1e/9iURleEj7i7GiIb7z3fSzg76A6cL+hskZmdVAoWhLgSLdIrkCx1wLJxExB/yPqsz1gaWoUOGOdXfMoKbJxQjVWyk/6EPebIatYeOHtLiQXqxSXGGJCYGkRB/cUq4W4ZCJkRfzv2D/BZch0aaebXe03DNtEI/ixk70eWA2Mi0GDpWLTs31pVzsZP9L5axlCIRroI/fumC6Mi2Q92pkC5V2IrH1q+5lpZ4N0b51re8MsrWYnWOpWGExURGhCHIRng0WuaCWlOBdQfzZ2K6v+vkeU+mGkvxKFqOXoEyHtiCU8aFKYKwvW7WdnbZfwFaa16MXQ3RXzHSupRpzlF36ZpEbeYKKYfwHzc5/7uBZ4fKZOi9+eSDHnP/j5Uo7OCphsRdLbkw2mQsN+YbKGhTxNNhkIeNeV/xIv7aKB4XHCHk8+Uxo6kyi0sVHUiKDRYaylyNyAPkgl/FJRQx6654Ud/h2bmcbzc17OspB1ixJl1mNhkjMeqqk29yA9D+0lC5gxMiTFz2/ibKhVWSge+MukUPcsBjw/Zs15Z+ouxsyTTIsOC93ly1L4X3+0HnDgRQ6/E1/bU/8a8xwCDtp14Hl5e/llurqYJLCD/P6sgr8FctDZ0Fp1LAOER/jzvBiPFnxAgpP9VoBQ8/nvGuBF+CY3wNznpfFrnr1aej3wndtE8=
+  app: dry-shore-86449
+  run: "php artisan migrate --force"
