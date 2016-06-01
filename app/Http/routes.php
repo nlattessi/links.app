@@ -16,3 +16,4 @@ $app->get('/', function () use ($app) {
 });
 
 $app->get('/links', 'LinksController@index');
+$app->get('/links/{id}', 'LinksController@show');
