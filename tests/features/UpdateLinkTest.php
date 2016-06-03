@@ -22,8 +22,8 @@ class UpdateLinkTest extends TestCase
 
         $this
             ->seeStatusCode(200)
-            ->seeInJson([
-                'id' => 10,
+            ->seeJson([
+                'id' => $link->id,
                 'title' => 'Links app',
                 'url' => "https://links.app",
                 'description' => "A links storage service",
