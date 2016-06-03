@@ -17,10 +17,12 @@
 * ~~Deploy to Heroku~~
 * ~~Integrate Codeship~~
 * ~~GET /links~~
-* ~~CREATE /links~~
+* CREATE /links
 * ~~GET /links/{id}~~
-* UPDATE /links/{id}
+* ~~UPDATE /links/{id}~~
 * ~~DELETE /links/{id}~~
+* Add basic error and responses messages
+* Refactor to check invalid routes (\d)
 * Refactor responses and Error Handling
 * Serialize output (\League\Fractal?)
 * Add Validation
