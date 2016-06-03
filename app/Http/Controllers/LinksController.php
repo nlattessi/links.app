@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Link;
+use Illuminate\Http\Request;
 
 class LinksController extends Controller
 {
@@ -14,6 +15,16 @@ class LinksController extends Controller
     public function show($id)
     {
         return Link::findOrFail($id);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $link = Link::findOrFail($id);
+
+        $link->fill($request->all());
+        $link->save();
+
+        return $link;
     }
 
     public function destroy($id)
