@@ -15,4 +15,13 @@ class LinksController extends Controller
     {
         return Link::findOrFail($id);
     }
+
+    public function destroy($id)
+    {
+        $link = Link::findOrFail($id);
+
+        $link->delete();
+
+        return response(null, 200);
+    }
 }
