@@ -23,14 +23,9 @@ class DeleteLinkTest extends TestCase
         $this
             ->delete("/links/{$link->id}")
             ->seeStatusCode(200)
-            ->notSeeInDatabase('links', [
-                'id' => $link->id,
-                'title' => $link->title,
-                'url' => $link->url,
-                'description' => $link->description,
-                'created_at' => $link->created_at,
-                'updated_at' => $link->updated_at,
-            ]);
+            ->isEmpty();
+
+        $this->notSeeInDatabase('links', ['id' => $link->id]);
     }
 
     public function testGet404IfNotExistsLink()
