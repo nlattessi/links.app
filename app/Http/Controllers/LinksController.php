@@ -30,7 +30,7 @@ class LinksController extends Controller
     {
         $link = Link::create($request->all());
 
-        return response()->json($link, 200);
+        return response()->json($link, 201, ['Location' => "/links/{$link->id}"]);
     }
 
     public function update(Request $request, $id)

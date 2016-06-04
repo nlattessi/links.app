@@ -16,12 +16,14 @@ class CreateLinkTest extends TestCase
             ]);
 
         $this
-            ->seeStatusCode(200)
+            ->seeStatusCode(201)
             ->seeJson([
                 'title' => 'Links app',
                 'url' => "https://links.app",
                 'description' => "A links storage service",
             ])
+            ->seeHeaderWithRegExp('Location', '#/links/[\d]+$#')
             ->seeInDatabase('links', ['url' => "https://links.app"]);
+
     }
 }
