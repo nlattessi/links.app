@@ -18,5 +18,5 @@ $app->get('/', function () use ($app) {
 $app->get('/links', 'LinksController@index');
 $app->get('/links/{id: [\d]+}', 'LinksController@show');
 $app->post('/links', 'LinksController@store');
-$app->put('/links/{id}', 'LinksController@update');
+$app->put('/links/{id: [\d]+}', 'LinksController@update');
 $app->delete('/links/{id}', 'LinksController@destroy');

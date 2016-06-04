@@ -35,7 +35,15 @@ class LinksController extends Controller
 
     public function update(Request $request, $id)
     {
-        $link = Link::findOrFail($id);
+        try {
+            $link = Link::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'error' => [
+                    'message' => 'Link not found',
+                ],
+            ], 404);
+        }
 
         $link->fill($request->all());
         $link->save();
