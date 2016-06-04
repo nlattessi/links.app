@@ -8,12 +8,8 @@ class CreateLinkTest extends TestCase
 
     public function testCreateLink()
     {
-        // $link = factory(\App\Link::class)->create();
-
-        // $this->notSeeInDatabase('links', ['url' => "https://links.app"]);
-
         $this
-            ->post("/links/{$link->id}", [
+            ->post('/links', [
                 'title' => 'Links app',
                 'url' => "https://links.app",
                 'description' => "A links storage service",
