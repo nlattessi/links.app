@@ -17,6 +17,13 @@ class LinksController extends Controller
         return Link::findOrFail($id);
     }
 
+    public function store(Request $request)
+    {
+        $link = Link::create($request->all());
+
+        return response()->json($link, 200);
+    }
+
     public function update(Request $request, $id)
     {
         $link = Link::findOrFail($id);
