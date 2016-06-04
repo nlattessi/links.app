@@ -1,0 +1,31 @@
+<?php
+
+use Laravel\Lumen\Testing\DatabaseMigrations;
+
+class CreateLinkTest extends TestCase
+{
+    use DatabaseMigrations;
+
+    public function testCreateLink()
+    {
+        // $link = factory(\App\Link::class)->create();
+
+        // $this->notSeeInDatabase('links', ['url' => "https://links.app"]);
+
+        $this
+            ->post("/links/{$link->id}", [
+                'title' => 'Links app',
+                'url' => "https://links.app",
+                'description' => "A links storage service",
+            ]);
+
+        $this
+            ->seeStatusCode(200)
+            ->seeJson([
+                'title' => 'Links app',
+                'url' => "https://links.app",
+                'description' => "A links storage service",
+            ])
+            ->seeInDatabase('links', ['url' => "https://links.app"]);
+    }
+}
