@@ -53,10 +53,18 @@ class LinksController extends Controller
 
     public function destroy($id)
     {
-        $link = Link::findOrFail($id);
+        try {
+            $link = Link::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'error' => [
+                    'message' => 'Link not found',
+                ],
+            ], 404);
+        }
 
         $link->delete();
 
-        return response(null, 200);
+        return response(null, 204);
     }
 }
