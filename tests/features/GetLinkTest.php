@@ -31,10 +31,27 @@ class GetLinkTest extends TestCase
             ]);
     }
 
-    public function testGet404IfNotExistsLink()
+    public function testShouldFailIfLinkIdNotExist()
     {
         $this
             ->get('links/999')
-            ->seeStatusCode(404);
+            ->seeStatusCode(404)
+            ->seeJson([
+                'error' => [
+                    'message' => 'Link not found',
+                ],
+            ]);
+    }
+
+    public function testShouldNotMatchAnInvalidRoute()
+    {
+        $this->get('/links/invalid-route');
+
+        $this
+            ->assertNotRegExp(
+                '/Link not found/',
+                $this->response->getContent(),
+                'LinksController@show route matching when it should not.'
+            );
     }
 }
