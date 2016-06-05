@@ -57,6 +57,10 @@ class Handler extends ExceptionHandler
                 $response['status'] = $e->getStatusCode();
             }
 
+            if ($e instanceof ModelNotFoundException) {
+                $response['message'] = Response::$statusTexts[$e]
+            }
+
             if ($this->isDebugMode()) {
                 $response['debug'] = [
                     'exception' => get_class($e),
@@ -70,7 +74,7 @@ class Handler extends ExceptionHandler
         return parent::render($request, $e);
     }
 
-    private function isDebugMode()
+    public function isDebugMode()
     {
         return (bool) env('APP_DEBUG');
     }
