@@ -33,10 +33,27 @@ class UpdateLinkTest extends TestCase
         $this->notSeeInDatabase('links', ['url' => $link->url]);
     }
 
-    public function testGet404IfNotExistsLink()
+    public function testShouldFailIfLinkIdNotExist()
     {
         $this
             ->put('links/999', [])
-            ->seeStatusCode(404);
+            ->seeStatusCode(404)
+            ->seeJson([
+                'error' => [
+                    'message' => 'Link not found',
+                ],
+            ]);
+    }
+
+    public function testShouldNotMatchAnInvalidRoute()
+    {
+        $this->put('/links/invalid-route', []);
+
+        $this
+            ->assertNotRegExp(
+                '/Link not found/',
+                $this->response->getContent(),
+                'LinksController@update route matching when it should not.'
+            );
     }
 }

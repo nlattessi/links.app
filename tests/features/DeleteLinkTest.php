@@ -22,16 +22,33 @@ class DeleteLinkTest extends TestCase
 
         $this
             ->delete("/links/{$link->id}")
-            ->seeStatusCode(200)
+            ->seeStatusCode(204)
             ->isEmpty();
 
         $this->notSeeInDatabase('links', ['id' => $link->id]);
     }
 
-    public function testGet404IfNotExistsLink()
+    public function testShouldFailIfLinkIdNotExist()
     {
         $this
             ->delete('links/999')
-            ->seeStatusCode(404);
+            ->seeStatusCode(404)
+            ->seeJson([
+                'error' => [
+                    'message' => 'Link not found',
+                ],
+            ]);
+    }
+
+    public function testShouldNotMatchAnInvalidRoute()
+    {
+        $this->delete('/links/invalid-route');
+
+        $this
+            ->assertNotRegExp(
+                '/Link not found/',
+                $this->response->getContent(),
+                'LinksController@update route matching when it should not.'
+            );
     }
 }
