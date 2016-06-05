@@ -10,14 +10,17 @@ class UpdateLinkTest extends TestCase
     {
         $link = factory(\App\Link::class)->create();
 
-        $this->notSeeInDatabase('links', ['url' => "https://links.app"]);
+        $this->notSeeInDatabase('links', [
+            'title' => 'Links app',
+            'url' => 'https://links.app',
+            'description' => 'A links storage service',
+        ]);
 
         $this
             ->put("/links/{$link->id}", [
-                'id' => 10,
                 'title' => 'Links app',
-                'url' => "https://links.app",
-                'description' => "A links storage service",
+                'url' => 'https://links.app',
+                'description' => 'A links storage service',
             ]);
 
         $this
@@ -25,10 +28,13 @@ class UpdateLinkTest extends TestCase
             ->seeJson([
                 'id' => $link->id,
                 'title' => 'Links app',
-                'url' => "https://links.app",
-                'description' => "A links storage service",
+                'url' => 'https://links.app',
+                'description' => 'A links storage service',
             ])
-            ->seeInDatabase('links', ['url' => "https://links.app"]);
+            ->seeInDatabase('links', ['url' => 'https://links.app']);
+
+        $body = json_decode($this->response->getContent(), true);
+        $this->assertArrayHasKey('data', $body);
 
         $this->notSeeInDatabase('links', ['url' => $link->url]);
     }

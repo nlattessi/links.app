@@ -15,14 +15,18 @@ class LinksController extends Controller
 
     public function show($id)
     {
-        return Link::findOrFail($id);
+        return ['data' => Link::findOrFail($id)];
     }
 
     public function store(Request $request)
     {
         $link = Link::create($request->all());
 
-        return response()->json($link, 201, ['Location' => "/links/{$link->id}"]);
+        return response()->json(
+            ['data' => $link],
+            201,
+            ['Location' => "/links/{$link->id}"]
+        );
     }
 
     public function update(Request $request, $id)
@@ -32,7 +36,7 @@ class LinksController extends Controller
         $link->fill($request->all());
         $link->save();
 
-        return $link;
+        return ['data' => $link];
     }
 
     public function destroy($id)
