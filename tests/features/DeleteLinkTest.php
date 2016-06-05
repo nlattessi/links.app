@@ -31,11 +31,12 @@ class DeleteLinkTest extends TestCase
     public function testShouldFailIfLinkIdNotExist()
     {
         $this
-            ->delete('links/999')
+            ->delete('links/999', [], ['Accept' => 'application/json'])
             ->seeStatusCode(404)
             ->seeJson([
                 'error' => [
-                    'message' => 'Link not found',
+                    'message' => 'Not Found',
+                    'status' => 404,
                 ],
             ]);
     }

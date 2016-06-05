@@ -36,11 +36,12 @@ class UpdateLinkTest extends TestCase
     public function testShouldFailIfLinkIdNotExist()
     {
         $this
-            ->put('links/999', [])
+            ->put('links/999', [], ['Accept' => 'application/json'])
             ->seeStatusCode(404)
             ->seeJson([
                 'error' => [
-                    'message' => 'Link not found',
+                    'message' => 'Not Found',
+                    'status' => 404,
                 ],
             ]);
     }
