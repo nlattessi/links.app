@@ -10,7 +10,7 @@ class LinksController extends Controller
 {
     public function index()
     {
-        return Link::all();
+        return ['data' => Link::all()];
     }
 
     public function show($id)
