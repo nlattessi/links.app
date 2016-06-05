@@ -15,15 +15,7 @@ class LinksController extends Controller
 
     public function show($id)
     {
-        try {
-            return Link::findOrFail($id);    
-        } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => [
-                    'message' => 'Link not found',
-                ],
-            ], 404);
-        }
+        return Link::findOrFail($id);
     }
 
     public function store(Request $request)
@@ -35,15 +27,7 @@ class LinksController extends Controller
 
     public function update(Request $request, $id)
     {
-        try {
-            $link = Link::findOrFail($id);
-        } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => [
-                    'message' => 'Link not found',
-                ],
-            ], 404);
-        }
+        $link = Link::findOrFail($id);
 
         $link->fill($request->all());
         $link->save();
@@ -53,15 +37,7 @@ class LinksController extends Controller
 
     public function destroy($id)
     {
-        try {
-            $link = Link::findOrFail($id);
-        } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => [
-                    'message' => 'Link not found',
-                ],
-            ], 404);
-        }
+        $link = Link::findOrFail($id);
 
         $link->delete();
 

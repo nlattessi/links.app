@@ -34,11 +34,12 @@ class GetLinkTest extends TestCase
     public function testShouldFailIfLinkIdNotExist()
     {
         $this
-            ->get('links/999')
+            ->get('links/999', ['Accept' => 'application/json'])
             ->seeStatusCode(404)
             ->seeJson([
                 'error' => [
-                    'message' => 'Link not found',
+                    'message' => 'Not Found',
+                    'status' => 404,
                 ],
             ]);
     }
