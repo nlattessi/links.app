@@ -58,7 +58,8 @@ class Handler extends ExceptionHandler
             }
 
             if ($e instanceof ModelNotFoundException) {
-                $response['message'] = Response::$statusTexts[$e]
+                $response['message'] = Response::$statusTexts[Response::HTTP_NOT_FOUND];
+                $response['status'] = Response::HTTP_NOT_FOUND;
             }
 
             if ($this->isDebugMode()) {
