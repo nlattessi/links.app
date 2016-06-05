@@ -1,6 +1,7 @@
 <?php
 
 use App\Exceptions\Handler;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Laravel\Lumen\Testing\DatabaseTransactions;
@@ -70,6 +71,11 @@ class HandlerTest extends TestCase
             ],
             [
                 'mock' => NotFoundHttpException::class,
+                'message' => 'Not Found',
+                'status' => 404,
+            ],
+            [
+                'mock' => ModelNotFoundException::class,
                 'message' => 'Not Found',
                 'status' => 404,
             ],
