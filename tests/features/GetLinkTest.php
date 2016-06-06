@@ -10,14 +10,20 @@ class GetLinkTest extends TestCase
     {
         $link = factory(\App\Link::class)->create();
 
-        $expected = [
-            'data' => $link->toArray(),
-        ];
-
         $this
             ->get("/links/{$link->id}")
-            ->seeStatusCode(200)
-            ->seeJsonEquals($expected);
+            ->seeStatusCode(200);
+
+        $body = json_decode($this->response->getContent(), true);
+        $this->assertArrayHasKey('data', $body);
+
+        $data = $body['data'];
+        $this->assertEquals($link->id, $data['id']);
+        $this->assertEquals($link->title, $data['title']);
+        $this->assertEquals($link->url, $data['url']);
+        $this->assertEquals($link->description, $data['description']);
+        $this->assertEquals($link->created_at->toIso8601String(), $data['created_at']);
+        $this->assertEquals($link->updated_at->toIso8601String(), $data['updated_at']);
     }
 
     public function testShouldFailIfLinkIdNotExist()

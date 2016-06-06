@@ -16,7 +16,7 @@ class LinksController extends Controller
 
     public function show($id)
     {
-        return ['data' => Link::findOrFail($id)];
+        return $this->item(Link::findOrFail($id), new LinkTransformer());
     }
 
     public function store(Request $request)
