@@ -24,7 +24,7 @@ class LinksController extends Controller
         $link = Link::create($request->all());
 
         return response()->json(
-            ['data' => $link],
+            $this->item($link, new LinkTransformer()),
             201,
             ['Location' => "/links/{$link->id}"]
         );
