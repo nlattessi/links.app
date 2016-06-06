@@ -21,6 +21,11 @@ class LinksController extends Controller
 
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'title' => 'required',
+            'url' => 'required',
+        ]);
+
         $link = Link::create($request->all());
 
         return response()->json(

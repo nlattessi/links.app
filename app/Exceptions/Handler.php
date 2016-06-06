@@ -57,6 +57,10 @@ class Handler extends ExceptionHandler
                 $response['status'] = $e->getStatusCode();
             }
 
+            if ($e instanceof ValidationException) {
+                return parent::render($request, $e);
+            }
+
             if ($e instanceof ModelNotFoundException) {
                 $response['message'] = Response::$statusTexts[Response::HTTP_NOT_FOUND];
                 $response['status'] = Response::HTTP_NOT_FOUND;
