@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Link;
+use App\Transformers\LinkTransformer;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
@@ -10,7 +11,7 @@ class LinksController extends Controller
 {
     public function index()
     {
-        return ['data' => Link::all()];
+        return $this->collection(Link::all(), new LinkTransformer());
     }
 
     public function show($id)
