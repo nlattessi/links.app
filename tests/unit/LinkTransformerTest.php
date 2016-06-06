@@ -10,7 +10,21 @@ class LinkTransformerTest extends TestCase
 
     public function testItCanBeInitialized()
     {
+        $this->assertInstanceOf(TransformerAbstract::class, new LinkTransformer());
+    }
+
+    public function test_it_transforms_a_link_model()
+    {
+        $link = factory(\App\Link::class)->create();
         $transformer = new LinkTransformer();
-        $this->assertInstanceOf(TransformerAbstract::class, $transformer);
+
+        $transformedLink = $transformer->transform($link);
+
+        $this->assertArrayHasKey('id', $transformedLink);
+        $this->assertArrayHasKey('title', $transformedLink);
+        $this->assertArrayHasKey('url', $transformedLink);
+        $this->assertArrayHasKey('description', $transformedLink);
+        $this->assertArrayHasKey('created_at', $transformedLink);
+        $this->assertArrayHasKey('updated_at', $transformedLink);
     }
 }
