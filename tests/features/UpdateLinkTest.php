@@ -1,6 +1,7 @@
 <?php
 
 use Carbon\Carbon;
+use Illuminate\Http\Response;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 
 class UpdateLinkTest extends TestCase
@@ -83,5 +84,22 @@ class UpdateLinkTest extends TestCase
                 $this->response->getContent(),
                 'LinksController@update route matching when it should not.'
             );
+    }
+
+    public function test_it_validates_required_fields_when_updating_a_link()
+    {
+        $link = factory(\App\Link::class)->create();
+
+        $this->put("/links/{$link->id}", [], ['Accept' => 'application/json']);
+        
+        $this->assertEquals(Response::HTTP_UNPROCESSABLE_ENTITY, $this->response->getStatusCode());
+
+        $body = json_decode($this->response->getContent(), true);
+
+        $this->assertArrayHasKey('title', $body);
+        $this->assertArrayHasKey('url', $body);
+
+        $this->assertEquals(['The title field is required.'], $body['title']);
+        $this->assertEquals(['The url field is required.'], $body['url']);
     }
 }

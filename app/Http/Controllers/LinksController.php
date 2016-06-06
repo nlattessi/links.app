@@ -39,6 +39,11 @@ class LinksController extends Controller
     {
         $link = Link::findOrFail($id);
 
+        $this->validate($request, [
+            'title' => 'required',
+            'url' => 'required',
+        ]);
+
         $link->fill($request->all());
         $link->save();
 
