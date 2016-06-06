@@ -37,7 +37,7 @@ class LinksController extends Controller
         $link->fill($request->all());
         $link->save();
 
-        return ['data' => $link];
+        return $this->item($link, new LinkTransformer());
     }
 
     public function destroy($id)

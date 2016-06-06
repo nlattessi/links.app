@@ -1,10 +1,25 @@
 <?php
 
+use Carbon\Carbon;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 
 class UpdateLinkTest extends TestCase
 {
     use DatabaseMigrations;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        Carbon::setTestNow(Carbon::now('UTC'));
+    }
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        Carbon::setTestNow();
+    }
 
     public function testUpdateLink()
     {
@@ -35,6 +50,12 @@ class UpdateLinkTest extends TestCase
 
         $body = json_decode($this->response->getContent(), true);
         $this->assertArrayHasKey('data', $body);
+
+        $data = $body['data'];
+        $this->assertArrayHasKey('created_at', $data);
+        $this->assertEquals(Carbon::now()->toIso8601String(), $data['created_at']);
+        $this->assertArrayHasKey('updated_at', $data);
+        $this->assertEquals(Carbon::now()->toIso8601String(), $data['updated_at']);
 
         $this->notSeeInDatabase('links', ['url' => $link->url]);
     }
