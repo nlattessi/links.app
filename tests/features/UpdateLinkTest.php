@@ -1,23 +1,41 @@
 <?php
 
+use Carbon\Carbon;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 
 class UpdateLinkTest extends TestCase
 {
     use DatabaseMigrations;
 
+    public function setUp()
+    {
+        parent::setUp();
+
+        Carbon::setTestNow(Carbon::now('UTC'));
+    }
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        Carbon::setTestNow();
+    }
+
     public function testUpdateLink()
     {
         $link = factory(\App\Link::class)->create();
 
-        $this->notSeeInDatabase('links', ['url' => "https://links.app"]);
+        $this->notSeeInDatabase('links', [
+            'title' => 'Links app',
+            'url' => 'https://links.app',
+            'description' => 'A links storage service',
+        ]);
 
         $this
             ->put("/links/{$link->id}", [
-                'id' => 10,
                 'title' => 'Links app',
-                'url' => "https://links.app",
-                'description' => "A links storage service",
+                'url' => 'https://links.app',
+                'description' => 'A links storage service',
             ]);
 
         $this
@@ -25,10 +43,19 @@ class UpdateLinkTest extends TestCase
             ->seeJson([
                 'id' => $link->id,
                 'title' => 'Links app',
-                'url' => "https://links.app",
-                'description' => "A links storage service",
+                'url' => 'https://links.app',
+                'description' => 'A links storage service',
             ])
-            ->seeInDatabase('links', ['url' => "https://links.app"]);
+            ->seeInDatabase('links', ['url' => 'https://links.app']);
+
+        $body = json_decode($this->response->getContent(), true);
+        $this->assertArrayHasKey('data', $body);
+
+        $data = $body['data'];
+        $this->assertArrayHasKey('created_at', $data);
+        $this->assertEquals(Carbon::now()->toIso8601String(), $data['created_at']);
+        $this->assertArrayHasKey('updated_at', $data);
+        $this->assertEquals(Carbon::now()->toIso8601String(), $data['updated_at']);
 
         $this->notSeeInDatabase('links', ['url' => $link->url]);
     }

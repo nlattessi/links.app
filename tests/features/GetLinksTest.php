@@ -14,24 +14,18 @@ class GetLinksTest extends TestCase
             ->get('/links')
             ->seeStatusCode(200);
 
+        $body = json_decode($this->response->getContent(), true);
+        $this->assertArrayHasKey('data', $body);
+
         foreach ($links as $link) {
-            $this
-                ->seeInDatabase('links', [
-                    'id' => $link->id,
-                    'title' => $link->title,
-                    'url' => $link->url,
-                    'description' => $link->description,
-                    'created_at' => $link->created_at,
-                    'updated_at' => $link->updated_at,
-                ])
-                ->seeJson([
-                    'id' => $link->id,
-                    'title' => $link->title,
-                    'url' => $link->url,
-                    'description' => $link->description,
-                    'created_at' => $link->created_at->toDateTimeString(),
-                    'updated_at' => $link->updated_at->toDateTimeString(),
-                ]);
+            $this->seeJson([
+                'id' => $link->id,
+                'title' => $link->title,
+                'url' => $link->url,
+                'description' => $link->description,
+                'created_at' => $link->created_at->toIso8601String(),
+                'updated_at' => $link->updated_at->toIso8601String(),
+            ]);
         }
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Link;
+use App\Transformers\LinkTransformer;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
@@ -10,19 +11,23 @@ class LinksController extends Controller
 {
     public function index()
     {
-        return Link::all();
+        return $this->collection(Link::all(), new LinkTransformer());
     }
 
     public function show($id)
     {
-        return Link::findOrFail($id);
+        return $this->item(Link::findOrFail($id), new LinkTransformer());
     }
 
     public function store(Request $request)
     {
         $link = Link::create($request->all());
 
-        return response()->json($link, 201, ['Location' => "/links/{$link->id}"]);
+        return response()->json(
+            $this->item($link, new LinkTransformer()),
+            201,
+            ['Location' => "/links/{$link->id}"]
+        );
     }
 
     public function update(Request $request, $id)
@@ -32,7 +37,7 @@ class LinksController extends Controller
         $link->fill($request->all());
         $link->save();
 
-        return $link;
+        return $this->item($link, new LinkTransformer());
     }
 
     public function destroy($id)
