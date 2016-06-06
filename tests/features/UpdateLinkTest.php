@@ -102,4 +102,41 @@ class UpdateLinkTest extends TestCase
         $this->assertEquals(['The title field is required.'], $body['title']);
         $this->assertEquals(['The url field is required.'], $body['url']);
     }
+
+    public function test_update_fails_pass_validation_when_title_is_too_long()
+    {
+        $link = factory(\App\Link::class)->create();
+        $link->title = str_repeat('a', 256);
+
+        $this
+            ->put("/links/{$link->id}", [
+                'title' => $link->title,
+                'url' => $link->url,
+                'description' => $link->description,
+            ], ['Accept' => 'application/json']);
+
+        $this
+            ->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->seeJson([
+                'title' => ['The title may not be greater than 255 characters.'],
+            ])
+            ->notSeeInDatabase('links', ['title' => $link->title]);
+    }
+
+    public function test_update_passes_validation_when_title_is_exactly_max()
+    {
+        $link = factory(\App\Link::class)->create();
+        $link->title = str_repeat('a', 255);
+
+        $this
+            ->put("/links/{$link->id}", [
+                'title' => $link->title,
+                'url' => $link->url,
+                'description' => $link->description,
+            ], ['Accept' => 'application/json']);
+
+        $this
+            ->seeStatusCode(Response::HTTP_OK)
+            ->seeInDatabase('links', ['title' => $link->title]);
+    }
 }

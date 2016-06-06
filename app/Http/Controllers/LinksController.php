@@ -22,7 +22,7 @@ class LinksController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'title' => 'required',
+            'title' => 'required|max:255',
             'url' => 'required',
         ]);
 
@@ -40,7 +40,7 @@ class LinksController extends Controller
         $link = Link::findOrFail($id);
 
         $this->validate($request, [
-            'title' => 'required',
+            'title' => 'required|max:255',
             'url' => 'required',
         ]);
 
