@@ -54,9 +54,9 @@ class UpdateLinkTest extends TestCase
 
         $data = $body['data'];
         $this->assertArrayHasKey('created_at', $data);
-        $this->assertEquals(Carbon::now()->toIso8601String(), $data['created_at']);
+        $this->assertEquals(Carbon::now()->toDateTimeString(), $data['created_at']);
         $this->assertArrayHasKey('updated_at', $data);
-        $this->assertEquals(Carbon::now()->toIso8601String(), $data['updated_at']);
+        $this->assertEquals(Carbon::now()->toDateTimeString(), $data['updated_at']);
 
         $this->notSeeInDatabase('links', ['url' => $link->url]);
     }
