@@ -22,8 +22,8 @@ class GetLinkTest extends TestCase
         $this->assertEquals($link->title, $data['title']);
         $this->assertEquals($link->url, $data['url']);
         $this->assertEquals($link->description, $data['description']);
-        $this->assertEquals($link->created_at->toIso8601String(), $data['created_at']);
-        $this->assertEquals($link->updated_at->toIso8601String(), $data['updated_at']);
+        $this->assertEquals($link->created_at->toDateTimeString(), $data['created_at']);
+        $this->assertEquals($link->updated_at->toDateTimeString(), $data['updated_at']);
     }
 
     public function testShouldFailIfLinkIdNotExist()
