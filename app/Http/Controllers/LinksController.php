@@ -21,6 +21,11 @@ class LinksController extends Controller
 
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'title' => 'required|max:255',
+            'url' => 'required|max:255',
+        ]);
+
         $link = Link::create($request->all());
 
         return response()->json(
@@ -33,6 +38,11 @@ class LinksController extends Controller
     public function update(Request $request, $id)
     {
         $link = Link::findOrFail($id);
+
+        $this->validate($request, [
+            'title' => 'required|max:255',
+            'url' => 'required|max:255',
+        ]);
 
         $link->fill($request->all());
         $link->save();
