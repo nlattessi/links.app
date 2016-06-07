@@ -43,8 +43,8 @@ class CreateLinkTest extends TestCase
         $this->assertEquals('Links app', $data['title']);
         $this->assertEquals('https://links.app', $data['url']);
         $this->assertEquals('A links storage service', $data['description']);
-        $this->assertEquals(Carbon::now()->toIso8601String(), $data['created_at']);
-        $this->assertEquals(Carbon::now()->toIso8601String(), $data['updated_at']);
+        $this->assertEquals(Carbon::now()->toDateTimeString(), $data['created_at']);
+        $this->assertEquals(Carbon::now()->toDateTimeString(), $data['updated_at']);
 
         $this->seeInDatabase('links', ['url' => "https://links.app"]);
     }
