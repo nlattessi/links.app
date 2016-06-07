@@ -23,7 +23,7 @@ class LinksController extends Controller
     {
         $this->validate($request, [
             'title' => 'required|max:255',
-            'url' => 'required',
+            'url' => 'required|max:255',
         ]);
 
         $link = Link::create($request->all());
@@ -41,7 +41,7 @@ class LinksController extends Controller
 
         $this->validate($request, [
             'title' => 'required|max:255',
-            'url' => 'required',
+            'url' => 'required|max:255',
         ]);
 
         $link->fill($request->all());
