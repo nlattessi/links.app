@@ -6,7 +6,7 @@ class GetLinksTest extends TestCase
 {
     use DatabaseMigrations;
 
-    public function testGetLinks()
+    public function test_get_links()
     {
         $links = factory(\App\Link::class, 5)->create();
 

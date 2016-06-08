@@ -6,7 +6,7 @@ class GetLinkTest extends TestCase
 {
     use DatabaseMigrations;
 
-    public function testGetLink()
+    public function test_get_link()
     {
         $link = factory(\App\Link::class)->create();
 
@@ -26,7 +26,7 @@ class GetLinkTest extends TestCase
         $this->assertEquals($link->updated_at->toDateTimeString(), $data['updated_at']);
     }
 
-    public function testShouldFailIfLinkIdNotExist()
+    public function test_should_fail_if_link_id_not_exist()
     {
         $this
             ->get('links/999', ['Accept' => 'application/json'])
@@ -39,7 +39,7 @@ class GetLinkTest extends TestCase
             ]);
     }
 
-    public function testShouldNotMatchAnInvalidRoute()
+    public function test_should_not_match_an_invalid_route()
     {
         $this->get('/links/invalid-route');
 

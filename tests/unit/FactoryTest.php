@@ -6,7 +6,7 @@ class FactoryTest extends TestCase
 {
     use DatabaseMigrations;
 
-    public function testFactoryLinksCreatedAreInDatabase()
+    public function test_factory_links_created_are_in_database()
     {
         $links = factory(\App\Link::class, 5)->create();
 

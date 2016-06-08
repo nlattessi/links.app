@@ -22,7 +22,7 @@ class UpdateLinkTest extends TestCase
         Carbon::setTestNow();
     }
 
-    public function testUpdateLink()
+    public function test_update_link()
     {
         $link = factory(\App\Link::class)->create();
 
@@ -61,7 +61,7 @@ class UpdateLinkTest extends TestCase
         $this->notSeeInDatabase('links', ['url' => $link->url]);
     }
 
-    public function testShouldFailIfLinkIdNotExist()
+    public function test_should_fail_if_id_not_exist()
     {
         $this
             ->put('links/999', [], ['Accept' => 'application/json'])
@@ -74,7 +74,7 @@ class UpdateLinkTest extends TestCase
             ]);
     }
 
-    public function testShouldNotMatchAnInvalidRoute()
+    public function test_should_not_match_an_invalid_route()
     {
         $this->put('/links/invalid-route', []);
 

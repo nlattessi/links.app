@@ -8,7 +8,7 @@ class LinkTransformerTest extends TestCase
 {
     use DatabaseMigrations;
 
-    public function testItCanBeInitialized()
+    public function test_it_can_be_initialized()
     {
         $this->assertInstanceOf(TransformerAbstract::class, new LinkTransformer());
     }
