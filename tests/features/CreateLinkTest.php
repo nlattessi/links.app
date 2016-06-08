@@ -22,7 +22,7 @@ class CreateLinkTest extends TestCase
         Carbon::setTestNow();
     }
 
-    public function testCreateLink()
+    public function test_create_link()
     {
         $this
             ->post('/links', [

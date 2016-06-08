@@ -14,7 +14,7 @@ class HandlerTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    public function testItRespondsWithHtmlWhenJsonIsNotAccepted()
+    public function test_it_responds_with_html_when_json_is_not_accepted()
     {
         $handler = m::mock(Handler::class)->makePartial();
         $handler->shouldNotReceive('isDebugMode');
@@ -31,7 +31,7 @@ class HandlerTest extends TestCase
         $this->assertNotInstanceOf(JsonResponse::class, $result);
     }
 
-    public function testItRespondsWithJsonWhenJsonIsAccepted()
+    public function test_it_responds_with_json_when_json_is_accepted()
     {
         $handler = m::mock(Handler::class)->makePartial();
         $handler->shouldReceive('isDebugMode')->andReturn(false);
@@ -55,7 +55,7 @@ class HandlerTest extends TestCase
         $this->assertEquals(400, $error['status']);
     }
 
-    public function testItRespondsWithJsonResponsesForHttpExceptions()
+    public function test_it_responds_with_json_responses_for_http_exceptions()
     {
         $handler = m::mock(Handler::class)->makePartial();
         $handler->shouldReceive('isDebugMode')->andReturn(false);

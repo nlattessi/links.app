@@ -6,7 +6,7 @@ class DeleteLinkTest extends TestCase
 {
     use DatabaseMigrations;
 
-    public function testDeleteLink()
+    public function test_delete_link()
     {
         $link = factory(\App\Link::class)->create();
 
@@ -28,7 +28,7 @@ class DeleteLinkTest extends TestCase
         $this->notSeeInDatabase('links', ['id' => $link->id]);
     }
 
-    public function testShouldFailIfLinkIdNotExist()
+    public function test_should_fail_if_id_not_exist()
     {
         $this
             ->delete('links/999', [], ['Accept' => 'application/json'])
@@ -41,7 +41,7 @@ class DeleteLinkTest extends TestCase
             ]);
     }
 
-    public function testShouldNotMatchAnInvalidRoute()
+    public function test_should_not_match_an_invalid_route()
     {
         $this->delete('/links/invalid-route');
 
