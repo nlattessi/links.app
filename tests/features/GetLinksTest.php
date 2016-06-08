@@ -11,7 +11,7 @@ class GetLinksTest extends TestCase
         $links = factory(\App\Link::class, 5)->create();
 
         $this
-            ->get('/links')
+            ->get('/links', ['Accept' => 'application/json'])
             ->seeStatusCode(200);
 
         $body = json_decode($this->response->getContent(), true);
