@@ -37,7 +37,7 @@ class UpdateLinkTest extends TestCase
                 'title' => 'Links app',
                 'url' => 'https://links.app',
                 'description' => 'A links storage service',
-            ]);
+            ], ['Accept' => 'application/json']);
 
         $this
             ->seeStatusCode(200)
@@ -76,7 +76,7 @@ class UpdateLinkTest extends TestCase
 
     public function test_should_not_match_an_invalid_route()
     {
-        $this->put('/links/invalid-route', []);
+        $this->put('/links/invalid-route', [], ['Accept' => 'application/json']);
 
         $this
             ->assertNotRegExp(

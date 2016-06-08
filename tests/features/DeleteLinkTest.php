@@ -21,7 +21,7 @@ class DeleteLinkTest extends TestCase
             ]);
 
         $this
-            ->delete("/links/{$link->id}")
+            ->delete("/links/{$link->id}", [], ['Accept' => 'application/json'])
             ->seeStatusCode(204)
             ->isEmpty();
 
@@ -43,7 +43,7 @@ class DeleteLinkTest extends TestCase
 
     public function test_should_not_match_an_invalid_route()
     {
-        $this->delete('/links/invalid-route');
+        $this->delete('/links/invalid-route', [], ['Accept' => 'application/json']);
 
         $this
             ->assertNotRegExp(

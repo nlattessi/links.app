@@ -29,7 +29,7 @@ class CreateLinkTest extends TestCase
                 'title' => 'Links app',
                 'url' => 'https://links.app',
                 'description' => 'A links storage service',
-            ]);
+            ], ['Accept' => 'application/json']);
 
         $this
             ->seeStatusCode(201)
@@ -74,7 +74,7 @@ class CreateLinkTest extends TestCase
                 'title' => $link->title,
                 'url' => $link->url,
                 'description' => $link->description,
-            ]);
+            ], ['Accept' => 'application/json']);
 
         $this
             ->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)
@@ -94,7 +94,7 @@ class CreateLinkTest extends TestCase
                 'title' => $link->title,
                 'url' => $link->url,
                 'description' => $link->description,
-            ]);
+            ], ['Accept' => 'application/json']);
 
         $this
             ->seeStatusCode(Response::HTTP_CREATED)

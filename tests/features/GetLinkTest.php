@@ -11,7 +11,7 @@ class GetLinkTest extends TestCase
         $link = factory(\App\Link::class)->create();
 
         $this
-            ->get("/links/{$link->id}")
+            ->get("/links/{$link->id}", ['Accept' => 'application/json'])
             ->seeStatusCode(200);
 
         $body = json_decode($this->response->getContent(), true);
@@ -41,7 +41,7 @@ class GetLinkTest extends TestCase
 
     public function test_should_not_match_an_invalid_route()
     {
-        $this->get('/links/invalid-route');
+        $this->get('/links/invalid-route', ['Accept' => 'application/json']);
 
         $this
             ->assertNotRegExp(
