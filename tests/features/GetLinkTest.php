@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Response;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 
 class GetLinkTest extends TestCase
@@ -12,7 +13,7 @@ class GetLinkTest extends TestCase
 
         $this
             ->get("/links/{$link->id}", ['Accept' => 'application/json'])
-            ->seeStatusCode(200);
+            ->seeStatusCode(Response::HTTP_OK);
 
         $body = json_decode($this->response->getContent(), true);
         $this->assertArrayHasKey('data', $body);
@@ -30,11 +31,11 @@ class GetLinkTest extends TestCase
     {
         $this
             ->get('links/999', ['Accept' => 'application/json'])
-            ->seeStatusCode(404)
+            ->seeStatusCode(Response::HTTP_NOT_FOUND)
             ->seeJson([
                 'error' => [
-                    'message' => 'Not Found',
-                    'status' => 404,
+                    'message' => Response::$statusTexts[Response::HTTP_NOT_FOUND],
+                    'status' => Response::HTTP_NOT_FOUND,
                 ],
             ]);
     }

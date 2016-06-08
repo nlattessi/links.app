@@ -40,7 +40,7 @@ class UpdateLinkTest extends TestCase
             ], ['Accept' => 'application/json']);
 
         $this
-            ->seeStatusCode(200)
+            ->seeStatusCode(Response::HTTP_OK)
             ->seeJson([
                 'id' => $link->id,
                 'title' => 'Links app',
@@ -65,11 +65,11 @@ class UpdateLinkTest extends TestCase
     {
         $this
             ->put('links/999', [], ['Accept' => 'application/json'])
-            ->seeStatusCode(404)
+            ->seeStatusCode(Response::HTTP_NOT_FOUND)
             ->seeJson([
                 'error' => [
-                    'message' => 'Not Found',
-                    'status' => 404,
+                    'message' => Response::$statusTexts[Response::HTTP_NOT_FOUND],
+                    'status' => Response::HTTP_NOT_FOUND,
                 ],
             ]);
     }
@@ -92,7 +92,10 @@ class UpdateLinkTest extends TestCase
 
         $this->put("/links/{$link->id}", [], ['Accept' => 'application/json']);
         
-        $this->assertEquals(Response::HTTP_UNPROCESSABLE_ENTITY, $this->response->getStatusCode());
+        $this->assertEquals(
+            Response::HTTP_UNPROCESSABLE_ENTITY,
+            $this->response->getStatusCode()
+        );
 
         $body = json_decode($this->response->getContent(), true);
 

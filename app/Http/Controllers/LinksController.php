@@ -6,6 +6,7 @@ use App\Link;
 use App\Transformers\LinkTransformer;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class LinksController extends Controller
 {
@@ -30,7 +31,7 @@ class LinksController extends Controller
 
         return response()->json(
             $this->item($link, new LinkTransformer()),
-            201,
+            Response::HTTP_CREATED,
             ['Location' => route('links.show', ['id' => $link->id])]
         );
     }
@@ -56,6 +57,6 @@ class LinksController extends Controller
 
         $link->delete();
 
-        return response(null, 204);
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 }
