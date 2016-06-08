@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Response;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 
 class GetLinksTest extends TestCase
@@ -12,7 +13,7 @@ class GetLinksTest extends TestCase
 
         $this
             ->get('/links', ['Accept' => 'application/json'])
-            ->seeStatusCode(200);
+            ->seeStatusCode(Response::HTTP_OK);
 
         $body = json_decode($this->response->getContent(), true);
         $this->assertArrayHasKey('data', $body);

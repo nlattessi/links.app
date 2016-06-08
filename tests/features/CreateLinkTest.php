@@ -32,7 +32,7 @@ class CreateLinkTest extends TestCase
             ], ['Accept' => 'application/json']);
 
         $this
-            ->seeStatusCode(201)
+            ->seeStatusCode(Response::HTTP_CREATED)
             ->seeHeaderWithRegExp('Location', '#/links/[\d]+$#');
         
         $body = json_decode($this->response->getContent(), true);

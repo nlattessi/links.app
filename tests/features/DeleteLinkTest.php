@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Response;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 
 class DeleteLinkTest extends TestCase
@@ -22,7 +23,7 @@ class DeleteLinkTest extends TestCase
 
         $this
             ->delete("/links/{$link->id}", [], ['Accept' => 'application/json'])
-            ->seeStatusCode(204)
+            ->seeStatusCode(Response::HTTP_NO_CONTENT)
             ->isEmpty();
 
         $this->notSeeInDatabase('links', ['id' => $link->id]);
@@ -32,11 +33,11 @@ class DeleteLinkTest extends TestCase
     {
         $this
             ->delete('links/999', [], ['Accept' => 'application/json'])
-            ->seeStatusCode(404)
+            ->seeStatusCode(Response::HTTP_NOT_FOUND)
             ->seeJson([
                 'error' => [
-                    'message' => 'Not Found',
-                    'status' => 404,
+                    'message' => Response::$statusTexts[Response::HTTP_NOT_FOUND],
+                    'status' => Response::HTTP_NOT_FOUND,
                 ],
             ]);
     }

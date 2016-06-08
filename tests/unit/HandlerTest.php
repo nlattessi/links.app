@@ -2,8 +2,9 @@
 
 use App\Exceptions\Handler;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Laravel\Lumen\Testing\DatabaseTransactions;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
@@ -52,7 +53,7 @@ class HandlerTest extends TestCase
         $this->assertArrayHasKey('message', $error);
         $this->assertArrayHasKey('status', $error);
         $this->assertEquals('Error', $error['message']);
-        $this->assertEquals(400, $error['status']);
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $error['status']);
     }
 
     public function test_it_responds_with_json_responses_for_http_exceptions()
@@ -66,18 +67,18 @@ class HandlerTest extends TestCase
         $exceptions = [
             [
                 'mock' => AccessDeniedHttpException::class,
-                'message' => 'Forbidden',
-                'status' => 403,
+                'message' => Response::$statusTexts[Response::HTTP_FORBIDDEN],
+                'status' => Response::HTTP_FORBIDDEN,
             ],
             [
                 'mock' => NotFoundHttpException::class,
-                'message' => 'Not Found',
-                'status' => 404,
+                'message' => Response::$statusTexts[Response::HTTP_NOT_FOUND],
+                'status' => Response::HTTP_NOT_FOUND,
             ],
             [
                 'mock' => ModelNotFoundException::class,
-                'message' => 'Not Found',
-                'status' => 404,
+                'message' => Response::$statusTexts[Response::HTTP_NOT_FOUND],
+                'status' => Response::HTTP_NOT_FOUND,
             ],
         ];
 
