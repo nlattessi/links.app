@@ -31,7 +31,7 @@ class LinksController extends Controller
         return response()->json(
             $this->item($link, new LinkTransformer()),
             201,
-            ['Location' => "/links/{$link->id}"]
+            ['Location' => route('links.show', ['id' => $link->id])]
         );
     }
 

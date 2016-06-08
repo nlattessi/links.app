@@ -15,8 +15,15 @@ $app->get('/', function () use ($app) {
     return $app->version();
 });
 
-$app->get('/links', 'LinksController@index');
-$app->get('/links/{id: [\d]+}', 'LinksController@show');
-$app->post('/links', 'LinksController@store');
-$app->put('/links/{id: [\d]+}', 'LinksController@update');
-$app->delete('/links/{id: [\d]+}', 'LinksController@destroy');
+$app->group([
+    'prefix' => '/links',
+    'namespace' => 'App\Http\Controllers'
+], function () use ($app) {
+    $app->get('/', 'LinksController@index');
+    $app->get('/{id: [\d]+}', [
+        'as' => 'links.show', 'uses' => 'LinksController@show',
+    ]);
+    $app->post('/', 'LinksController@store');
+    $app->put('/{id: [\d]+}', 'LinksController@update');
+    $app->delete('/{id: [\d]+}', 'LinksController@destroy');
+});
