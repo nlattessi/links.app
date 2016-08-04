@@ -63,9 +63,20 @@ $app->singleton(
 //    App\Http\Middleware\ExampleMiddleware::class
 // ]);
 
+$app->middleware([
+    \LucaDegasperi\OAuth2Server\Middleware\OAuthExceptionHandlerMiddleware::class
+]);
+
 // $app->routeMiddleware([
 //     'auth' => App\Http\Middleware\Authenticate::class,
 // ]);
+
+$app->routeMiddleware([
+    'check-authorization-params' => \LucaDegasperi\OAuth2Server\Middleware\CheckAuthCodeRequestMiddleware::class,
+    'oauth' => \LucaDegasperi\OAuth2Server\Middleware\OAuthMiddleware::class,
+    'oauth-client' => \LucaDegasperi\OAuth2Server\Middleware\OAuthClientOwnerMiddleware::class,
+    'oauth-user' => \LucaDegasperi\OAuth2Server\Middleware\OAuthUserOwnerMiddleware::class,
+]);
 
 /*
 |--------------------------------------------------------------------------
@@ -83,6 +94,8 @@ $app->singleton(
 // $app->register(App\Providers\EventServiceProvider::class);
 
 $app->register(App\Providers\FractalServiceProvider::class);
+$app->register(\LucaDegasperi\OAuth2Server\Storage\FluentStorageServiceProvider::class);
+$app->register(\LucaDegasperi\OAuth2Server\OAuth2ServerServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -107,7 +120,12 @@ if ($stderr === true) {
         );
 
         return $monolog;
-    });    
+    });
 }
+
+class_alias(\LucaDegasperi\OAuth2Server\Facades\Authorizer::class, 'Authorizer');
+
+$app->configure('app');
+$app->configure('secrets');
 
 return $app;
