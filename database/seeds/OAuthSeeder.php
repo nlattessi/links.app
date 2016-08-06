@@ -17,5 +17,4 @@ class OAuthSeeder extends Seeder {
             'name' => 'App'
         ]);
     }
-
 }

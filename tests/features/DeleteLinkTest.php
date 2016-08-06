@@ -7,6 +7,13 @@ class DeleteLinkTest extends TestCase
 {
     use DatabaseMigrations;
 
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->app->instance('middleware.disable', true);
+    }
+
     public function test_delete_link()
     {
         $link = factory(\App\Link::class)->create();

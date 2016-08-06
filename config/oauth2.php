@@ -30,25 +30,14 @@ return [
     'grant_types' => [
         'password' => [
             'class' => '\League\OAuth2\Server\Grant\PasswordGrant',
-            'callback' => function($email, $password) {
-                $authManager = app()['auth'];
-
-                if (app()["auth"]->once([
-                    "email" => $email,
-                    "password" => $password
-                ])) {
-                    return $authManager->user()->id;
-                } else {
-                    return false;
-                }
-            },
+            'callback' => '\App\Auth\PasswordGrantVerifier@verify',
             'access_token_ttl' => 3600
         ],
         'refresh_token' => [
             'class' => '\League\OAuth2\Server\Grant\RefreshTokenGrant',
             'access_token_ttl' => 3600,
             'refresh_token_ttl' => 36000
-        ]
+        ],
     ],
 
     /*

@@ -23,6 +23,11 @@ $app = new Laravel\Lumen\Application(
     realpath(__DIR__.'/../')
 );
 
+// OAuth2
+if (!class_exists('Authorizer')) {
+    class_alias(\LucaDegasperi\OAuth2Server\Facades\Authorizer::class, 'Authorizer');
+}
+
 $app->withFacades();
 
 $app->withEloquent();
@@ -48,10 +53,12 @@ $app->singleton(
     App\Console\Kernel::class
 );
 
+// OAuth2
 $app->singleton('cookie', function () use ($app) {
     return $app->loadComponent('session', 'Illuminate\Cookie\CookieServiceProvider', 'cookie');
 });
 
+// OAuth2
 $app->bind('Illuminate\Contracts\Cookie\QueueingFactory', 'cookie');
 
 /*
@@ -69,6 +76,7 @@ $app->bind('Illuminate\Contracts\Cookie\QueueingFactory', 'cookie');
 //    App\Http\Middleware\ExampleMiddleware::class
 // ]);
 
+// OAuth2
 $app->middleware([
     \LucaDegasperi\OAuth2Server\Middleware\OAuthExceptionHandlerMiddleware::class,
     'Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse'
@@ -78,6 +86,7 @@ $app->middleware([
 //     'auth' => App\Http\Middleware\Authenticate::class,
 // ]);
 
+// OAuth2
 $app->routeMiddleware([
     'check-authorization-params' => \LucaDegasperi\OAuth2Server\Middleware\CheckAuthCodeRequestMiddleware::class,
     'oauth' => \LucaDegasperi\OAuth2Server\Middleware\OAuthMiddleware::class,
@@ -100,7 +109,10 @@ $app->routeMiddleware([
 // $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 
+// Fractal
 $app->register(App\Providers\FractalServiceProvider::class);
+
+// OAuth2
 $app->register(\LucaDegasperi\OAuth2Server\Storage\FluentStorageServiceProvider::class);
 $app->register(\LucaDegasperi\OAuth2Server\OAuth2ServerServiceProvider::class);
 
@@ -130,8 +142,7 @@ if ($stderr === true) {
     });
 }
 
-class_alias(\LucaDegasperi\OAuth2Server\Facades\Authorizer::class, 'Authorizer');
-
+// OAuth2
 $app->configure('app');
 $app->configure('secrets');
 

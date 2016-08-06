@@ -7,6 +7,13 @@ class GetLinksTest extends TestCase
 {
     use DatabaseMigrations;
 
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->app->instance('middleware.disable', true);
+    }
+
     public function test_get_links()
     {
         $links = factory(\App\Link::class, 5)->create();

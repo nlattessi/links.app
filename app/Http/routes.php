@@ -11,13 +11,14 @@
 |
 */
 
-// $app->get('/', function () use ($app) {
-//     return $app->version();
-// });
+$app->get('/', function () use ($app) {
+    return $app->version();
+});
 
 $app->group([
     'prefix' => '/links',
-    'namespace' => 'App\Http\Controllers'
+    'namespace' => 'App\Http\Controllers',
+    'middleware' => 'oauth',
 ], function () use ($app) {
     $app->get('/', 'LinksController@index');
     $app->get('/{id: [\d]+}', [
@@ -28,25 +29,30 @@ $app->group([
     $app->delete('/{id: [\d]+}', 'LinksController@destroy');
 });
 
-$app->get('/', function() use ($app) {
-    return view()->make('client');
-});
-
-$app->post('login', function() use($app) {
+// OAuth2
+$app->post('login', function() use ($app) {
     $credentials = app()->make('request')->input("credentials");
     return $app->make('App\Auth\Proxy')->attemptLogin($credentials);
 });
 
-$app->post('refresh-token', function() use($app) {
+$app->post('refresh-token', function() use ($app) {
     return $app->make('App\Auth\Proxy')->attemptRefresh();
 });
 
-$app->post('oauth/access-token', function() use($app) {
-    return response()->json($app->make('oauth2-server.authorizer')->issueAccessToken());
+$app->post('oauth/access-token', function() use ($app) {
+    return response()->json(Authorizer::issueAccessToken());
 });
 
-$app->group(['prefix' => 'api', 'middleware' => 'oauth'], function($app)
-{
+// OAuth2 test
+
+$app->get('/client', function() use ($app) {
+    return view()->make('client');
+});
+
+$app->group([
+    'prefix' => 'api',
+    'middleware' => 'oauth'
+], function () use ($app) {
     $app->get('resource', function() {
         return response()->json([
             "id" => 1,

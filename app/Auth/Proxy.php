@@ -38,10 +38,7 @@ class Proxy {
             ]);
         } catch(\GuzzleHttp\Exception\BadResponseException $e) {
             $guzzleResponse = $e->getResponse();
-
         }
-
-        var_dump($guzzleResponse);die();
 
         $response = json_decode($guzzleResponse->getBody());
 
