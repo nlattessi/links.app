@@ -15,7 +15,7 @@ class User extends Model implements
     use Authenticatable;
     use Authorizable;
 
-    protected $fillable = ['name', 'email'];
+    protected $fillable = ['email', 'password'];
 
     protected $hidden = ['password'];
 }

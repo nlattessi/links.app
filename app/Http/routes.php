@@ -40,7 +40,7 @@ $app->group([
     $app->get('/{id: [\d]+}', [
         'as' => 'users.show', 'uses' => 'UsersController@show',
     ]);
-    // $app->post('/', 'UsersController@store');
+    $app->post('/', 'UsersController@store');
     // $app->put('/{id: [\d]+}', 'UsersController@update');
     // $app->delete('/{id: [\d]+}', 'UsersController@destroy');
 });

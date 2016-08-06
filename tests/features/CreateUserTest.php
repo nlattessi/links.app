@@ -40,7 +40,7 @@ class CreateUserTest extends TestCase
 
         $data = $body['data'];
         $this->assertTrue($data['id'] > 0, 'Expected a positive integer, but did not see one');
-        $this->assertEquals('user@user.com', $data['title']);
+        $this->assertEquals('user@user.com', $data['email']);
         $this->assertEquals(Carbon::now()->toDateTimeString(), $data['created_at']);
         $this->assertEquals(Carbon::now()->toDateTimeString(), $data['updated_at']);
 

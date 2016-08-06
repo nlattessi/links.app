@@ -10,8 +10,6 @@ class PasswordGrantVerifier
     {
         $user = \App\User::where('email', $email)->first();
 
-        // $hasher = app()->make('hash');
-
         if ($user && app('hash')->check($password, $user->password)) {
             return $user->id;
         }
