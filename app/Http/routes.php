@@ -15,6 +15,7 @@ $app->get('/', function () use ($app) {
     return $app->version();
 });
 
+// /links
 $app->group([
     'prefix' => '/links',
     'namespace' => 'App\Http\Controllers',
@@ -27,6 +28,21 @@ $app->group([
     $app->post('/', 'LinksController@store');
     $app->put('/{id: [\d]+}', 'LinksController@update');
     $app->delete('/{id: [\d]+}', 'LinksController@destroy');
+});
+
+// /users
+$app->group([
+    'prefix' => '/users',
+    'namespace' => 'App\Http\Controllers',
+    'middleware' => 'oauth',
+], function () use ($app) {
+    $app->get('/', 'UsersController@index');
+    // $app->get('/{id: [\d]+}', [
+    //     'as' => 'users.show', 'uses' => 'UsersController@show',
+    // ]);
+    // $app->post('/', 'UsersController@store');
+    // $app->put('/{id: [\d]+}', 'UsersController@update');
+    // $app->delete('/{id: [\d]+}', 'UsersController@destroy');
 });
 
 // OAuth2
