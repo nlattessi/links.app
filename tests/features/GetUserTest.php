@@ -32,28 +32,28 @@ class GetUserTest extends TestCase
         $this->assertEquals($user->updated_at->toDateTimeString(), $data['updated_at']);
     }
 
-    // public function test_should_fail_if_link_id_not_exist()
-    // {
-    //     $this
-    //         ->get('links/999', ['Accept' => 'application/json'])
-    //         ->seeStatusCode(Response::HTTP_NOT_FOUND)
-    //         ->seeJson([
-    //             'error' => [
-    //                 'message' => Response::$statusTexts[Response::HTTP_NOT_FOUND],
-    //                 'status' => Response::HTTP_NOT_FOUND,
-    //             ],
-    //         ]);
-    // }
+    public function test_should_fail_if_user_id_not_exist()
+    {
+        $this
+            ->get('users/999', ['Accept' => 'application/json'])
+            ->seeStatusCode(Response::HTTP_NOT_FOUND)
+            ->seeJson([
+                'error' => [
+                    'message' => Response::$statusTexts[Response::HTTP_NOT_FOUND],
+                    'status' => Response::HTTP_NOT_FOUND,
+                ],
+            ]);
+    }
 
-    // public function test_should_not_match_an_invalid_route()
-    // {
-    //     $this->get('/links/invalid-route', ['Accept' => 'application/json']);
+    public function test_should_not_match_an_invalid_route()
+    {
+        $this->get('/users/invalid-route', ['Accept' => 'application/json']);
 
-    //     $this
-    //         ->assertNotRegExp(
-    //             '/Link not found/',
-    //             $this->response->getContent(),
-    //             'LinksController@show route matching when it should not.'
-    //         );
-    // }
+        $this
+            ->assertNotRegExp(
+                '/User not found/',
+                $this->response->getContent(),
+                'UsersController@show route matching when it should not.'
+            );
+    }
 }
