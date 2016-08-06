@@ -42,7 +42,7 @@ $app->group([
     ]);
     $app->post('/', 'UsersController@store');
     // $app->put('/{id: [\d]+}', 'UsersController@update');
-    // $app->delete('/{id: [\d]+}', 'UsersController@destroy');
+    $app->delete('/{id: [\d]+}', 'UsersController@destroy');
 });
 
 // OAuth2

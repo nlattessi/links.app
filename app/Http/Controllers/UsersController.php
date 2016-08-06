@@ -23,12 +23,11 @@ class UsersController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'email' => 'required|max:255|email|unique:users',
+            'email' => 'required|email|unique:users',
             'password' => 'required|max:255',
             // 'password_confirmation' => 'required|max:255',
         ], [
             'email.required' => 'The :attribute field is required.',
-            'email.max' => 'The :attribute may not be greater than :max characters.',
             'email.email' => 'The :attribute must be valid.',
             'email.unique' => 'This :attribute is already registered.',
             
@@ -69,12 +68,12 @@ class UsersController extends Controller
     //     return $this->item($link, new LinkTransformer());
     // }
 
-    // public function destroy($id)
-    // {
-    //     $link = Link::findOrFail($id);
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
 
-    //     $link->delete();
+        $user->delete();
 
-    //     return response(null, Response::HTTP_NO_CONTENT);
-    // }
+        return response(null, Response::HTTP_NO_CONTENT);
+    }
 }

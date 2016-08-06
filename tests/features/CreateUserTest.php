@@ -47,55 +47,93 @@ class CreateUserTest extends TestCase
         $this->seeInDatabase('users', ['email' => "user@user.com"]);
     }
 
-    // public function test_it_validates_required_fields_when_creating_a_new_link()
-    // {
-    //     $this
-    //         ->post('/links', [], ['Accept' => 'application/json'])
-    //         ->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
+    public function test_it_validates_required_fields_when_creating_a_new_user()
+    {
+        $this
+            ->post('/users', [], ['Accept' => 'application/json'])
+            ->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
 
-    //     $body = json_decode($this->response->getContent(), true);
+        $body = json_decode($this->response->getContent(), true);
 
-    //     $this->assertArrayHasKey('title', $body);
-    //     $this->assertArrayHasKey('url', $body);
+        $this->assertArrayHasKey('email', $body);
+        $this->assertArrayHasKey('password', $body);
 
-    //     $this->assertEquals(['The title field is required.'], $body['title']);
-    //     $this->assertEquals(['The url field is required.'], $body['url']);
-    // }
+        $this->assertEquals(['The email field is required.'], $body['email']);
+        $this->assertEquals(['The password field is required.'], $body['password']);
+    }
 
-    // public function test_create_fails_pass_validation_when_title_is_too_long()
-    // {
-    //     $link = factory(\App\Link::class)->make();
-    //     $link->title = str_repeat('a', 256);
+    public function test_create_fails_pass_validation_when_email_is_not_valid()
+    {
+        $user = factory(\App\User::class)->make();
+        $user->email = str_repeat('a', 10);
 
-    //     $this
-    //         ->post('/links', [
-    //             'title' => $link->title,
-    //             'url' => $link->url,
-    //             'description' => $link->description,
-    //         ], ['Accept' => 'application/json']);
+        $this
+            ->post('/users', [
+                'email' => $user->email,
+                'password' => $user->password,
+            ], ['Accept' => 'application/json']);
 
-    //     $this
-    //         ->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)
-    //         ->seeJson([
-    //             'title' => ['The title may not be greater than 255 characters.'],
-    //         ])
-    //         ->notSeeInDatabase('links', ['title' => $link->title]);
-    // }
+        $this
+            ->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->seeJson([
+                'email' => ['The email must be valid.'],
+            ])
+            ->notSeeInDatabase('users', ['email' => $user->email]);
+    }
 
-    // public function test_create_passes_validation_when_title_is_exactly_max()
-    // {
-    //     $link = factory(\App\Link::class)->make();
-    //     $link->title = str_repeat('a', 255);
+    public function test_create_fails_pass_validation_when_email_is_not_unique()
+    {
+        $oldUser = factory(\App\User::class)->create();
 
-    //     $this
-    //         ->post('/links', [
-    //             'title' => $link->title,
-    //             'url' => $link->url,
-    //             'description' => $link->description,
-    //         ], ['Accept' => 'application/json']);
+        $user = factory(\App\User::class)->make([
+            'email' => $oldUser->email
+        ]);
 
-    //     $this
-    //         ->seeStatusCode(Response::HTTP_CREATED)
-    //         ->seeInDatabase('links', ['title' => $link->title]);
-    // }
+        $this
+            ->post('/users', [
+                'email' => $user->email,
+                'password' => $user->password,
+            ], ['Accept' => 'application/json']);
+
+        $this
+            ->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->seeJson([
+                'email' => ['This email is already registered.'],
+            ]);
+    }
+
+    public function test_create_fails_pass_validation_when_password_is_too_long()
+    {
+        $user = factory(\App\User::class)->make();
+        $user->password = str_repeat('a', 256);
+
+        $this
+            ->post('/users', [
+                'email' => $user->email,
+                'password' => $user->password,
+            ], ['Accept' => 'application/json']);
+
+        $this
+            ->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->seeJson([
+                'password' => ['The password may not be greater than 255 characters.'],
+            ])
+            ->notSeeInDatabase('users', ['email' => $user->email]);
+    }
+
+    public function test_create_passes_validation_when_password_is_exactly_max()
+    {
+        $user = factory(\App\User::class)->make();
+        $user->password = str_repeat('a', 255);
+
+        $this
+            ->post('/users', [
+                'email' => $user->email,
+                'password' => $user->password,
+            ], ['Accept' => 'application/json']);
+
+        $this
+            ->seeStatusCode(Response::HTTP_CREATED)
+            ->seeInDatabase('users', ['email' => $user->email]);
+    }
 }
