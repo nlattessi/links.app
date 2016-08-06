@@ -15,10 +15,10 @@ class UsersController extends Controller
         return $this->collection(User::all(), new UserTransformer());
     }
 
-    // public function show($id)
-    // {
-    //     return $this->item(Link::findOrFail($id), new LinkTransformer());
-    // }
+    public function show($id)
+    {
+        return $this->item(User::findOrFail($id), new UserTransformer());
+    }
 
     // public function store(Request $request)
     // {
