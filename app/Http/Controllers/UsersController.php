@@ -35,10 +35,10 @@ class UsersController extends Controller
             'password.max' => 'The :attribute may not be greater than :max characters.',
         ]);
 
-        $user = User::create([
-            'email' => $request->input('email'),
-            'password' => app('hash')->make($request->input('password')),
+        $request->merge([
+            'password' => app('hash')->make($request->password)
         ]);
+        $user = User::create($request->all());
 
         return response()->json(
             $this->item($user, new UserTransformer()),
@@ -64,8 +64,10 @@ class UsersController extends Controller
             'password.max' => 'The :attribute may not be greater than :max characters.',
         ]);
 
-        $user->email = $request->input('email');
-        $user->password = app('hash')->make($request->input('password'));
+        $request->merge([
+            'password' => app('hash')->make($request->password)
+        ]);
+        $user->fill($request->all());
         $user->save();
 
         return $this->item($user, new UserTransformer());
