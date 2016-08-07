@@ -23,10 +23,11 @@ $app = new Laravel\Lumen\Application(
     realpath(__DIR__.'/../')
 );
 
-// OAuth2
-if (!class_exists('Authorizer')) {
-    class_alias(\LucaDegasperi\OAuth2Server\Facades\Authorizer::class, 'Authorizer');
-}
+// OAuth2 --- START
+// if (!class_exists('Authorizer')) {
+//     class_alias(\LucaDegasperi\OAuth2Server\Facades\Authorizer::class, 'Authorizer');
+// }
+// OAuth2 --- END
 
 $app->withFacades();
 
@@ -53,13 +54,13 @@ $app->singleton(
     App\Console\Kernel::class
 );
 
-// OAuth2
-$app->singleton('cookie', function () use ($app) {
-    return $app->loadComponent('session', 'Illuminate\Cookie\CookieServiceProvider', 'cookie');
-});
+// OAuth2 --- START
+// $app->singleton('cookie', function () use ($app) {
+//     return $app->loadComponent('session', 'Illuminate\Cookie\CookieServiceProvider', 'cookie');
+// });
 
-// OAuth2
-$app->bind('Illuminate\Contracts\Cookie\QueueingFactory', 'cookie');
+// $app->bind('Illuminate\Contracts\Cookie\QueueingFactory', 'cookie');
+// OAuth2 --- END
 
 /*
 |--------------------------------------------------------------------------
@@ -76,23 +77,25 @@ $app->bind('Illuminate\Contracts\Cookie\QueueingFactory', 'cookie');
 //    App\Http\Middleware\ExampleMiddleware::class
 // ]);
 
-// OAuth2
-$app->middleware([
-    \LucaDegasperi\OAuth2Server\Middleware\OAuthExceptionHandlerMiddleware::class,
-    'Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse'
-]);
+// OAuth2 --- START
+// $app->middleware([
+//     \LucaDegasperi\OAuth2Server\Middleware\OAuthExceptionHandlerMiddleware::class,
+//     'Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse'
+// ]);
+// OAuth2 --- END
 
 // $app->routeMiddleware([
 //     'auth' => App\Http\Middleware\Authenticate::class,
 // ]);
 
-// OAuth2
-$app->routeMiddleware([
-    'check-authorization-params' => \LucaDegasperi\OAuth2Server\Middleware\CheckAuthCodeRequestMiddleware::class,
-    'oauth' => \LucaDegasperi\OAuth2Server\Middleware\OAuthMiddleware::class,
-    'oauth-client' => \LucaDegasperi\OAuth2Server\Middleware\OAuthClientOwnerMiddleware::class,
-    'oauth-user' => \LucaDegasperi\OAuth2Server\Middleware\OAuthUserOwnerMiddleware::class,
-]);
+// OAuth2 --- START
+// $app->routeMiddleware([
+//     'check-authorization-params' => \LucaDegasperi\OAuth2Server\Middleware\CheckAuthCodeRequestMiddleware::class,
+//     'oauth' => \LucaDegasperi\OAuth2Server\Middleware\OAuthMiddleware::class,
+//     'oauth-client' => \LucaDegasperi\OAuth2Server\Middleware\OAuthClientOwnerMiddleware::class,
+//     'oauth-user' => \LucaDegasperi\OAuth2Server\Middleware\OAuthUserOwnerMiddleware::class,
+// ]);
+// OAuth2 --- END
 
 /*
 |--------------------------------------------------------------------------
@@ -113,8 +116,11 @@ $app->routeMiddleware([
 $app->register(App\Providers\FractalServiceProvider::class);
 
 // OAuth2
-$app->register(\LucaDegasperi\OAuth2Server\Storage\FluentStorageServiceProvider::class);
-$app->register(\LucaDegasperi\OAuth2Server\OAuth2ServerServiceProvider::class);
+// $app->register(\LucaDegasperi\OAuth2Server\Storage\FluentStorageServiceProvider::class);
+// $app->register(\LucaDegasperi\OAuth2Server\OAuth2ServerServiceProvider::class);
+
+// JWT
+$app->register(\Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -142,8 +148,9 @@ if ($stderr === true) {
     });
 }
 
-// OAuth2
-$app->configure('app');
-$app->configure('secrets');
+// OAuth2 --- START
+// $app->configure('app');
+// $app->configure('secrets');
+// OAuth2 --- END
 
 return $app;
