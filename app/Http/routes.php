@@ -1,21 +1,10 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It is a breeze. Simply tell Lumen the URIs it should respond to
-| and give it the Closure to call when that URI is requested.
-|
-*/
-
 $app->get('/', function () use ($app) {
     return $app->version();
 });
 
-// /links
+// /links --- START
 $app->group([
     'prefix' => '/links',
     'namespace' => 'App\Http\Controllers',
@@ -29,8 +18,9 @@ $app->group([
     $app->put('/{id: [\d]+}', 'LinksController@update');
     $app->delete('/{id: [\d]+}', 'LinksController@destroy');
 });
+// /links --- END
 
-// /users
+// /users --- START
 $app->group([
     'prefix' => '/users',
     'namespace' => 'App\Http\Controllers',
@@ -44,8 +34,9 @@ $app->group([
     $app->put('/{id: [\d]+}', 'UsersController@update');
     $app->delete('/{id: [\d]+}', 'UsersController@destroy');
 });
+// /users --- END
 
-// OAuth2
+// OAuth2 --- START
 $app->post('login', function() use ($app) {
     $credentials = app()->make('request')->input("credentials");
     return $app->make('App\Auth\Proxy')->attemptLogin($credentials);
@@ -58,9 +49,9 @@ $app->post('refresh-token', function() use ($app) {
 $app->post('oauth/access-token', function() use ($app) {
     return response()->json(Authorizer::issueAccessToken());
 });
+// OAuth2 --- END
 
-// OAuth2 test
-
+// OAuth2 test --- START
 $app->get('/client', function() use ($app) {
     return view()->make('client');
 });
@@ -76,3 +67,4 @@ $app->group([
         ]);
     });
 });
+// OAuth2 test --- END
