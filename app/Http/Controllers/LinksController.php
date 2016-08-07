@@ -25,6 +25,12 @@ class LinksController extends Controller
         $this->validate($request, [
             'title' => 'required|max:255',
             'url' => 'required|max:255',
+        ], [
+            'title.required' => 'The :attribute field is required.',
+            'title.max' => 'The :attribute may not be greater than :max characters.',
+            
+            'url.required' => 'The :attribute field is required.',
+            'url.max' => 'The :attribute may not be greater than :max characters.',
         ]);
 
         $link = Link::create($request->all());
@@ -43,6 +49,12 @@ class LinksController extends Controller
         $this->validate($request, [
             'title' => 'required|max:255',
             'url' => 'required|max:255',
+        ], [
+            'title.required' => 'The :attribute field is required.',
+            'title.max' => 'The :attribute may not be greater than :max characters.',
+            
+            'url.required' => 'The :attribute field is required.',
+            'url.max' => 'The :attribute may not be greater than :max characters.',
         ]);
 
         $link->fill($request->all());

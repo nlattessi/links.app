@@ -22,4 +22,21 @@ class FactoryTest extends TestCase
                 ]);
         }
     }
+
+    public function test_factory_users_created_are_in_database()
+    {
+        $users = factory(\App\User::class, 5)->create();
+
+        foreach ($users as $user) {
+            $this
+                ->seeInDatabase('users', [
+                    'id' => $user->id,
+                    'email' => $user->email,
+                    'password' => $user->password,
+                    'remember_token' => $user->remember_token,
+                    'created_at' => $user->created_at,
+                    'updated_at' => $user->updated_at,
+                ]);
+        }
+    }
 }

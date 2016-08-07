@@ -13,6 +13,7 @@ class UpdateLinkTest extends TestCase
         parent::setUp();
 
         Carbon::setTestNow(Carbon::now('UTC'));
+        $this->app->instance('middleware.disable', true);
     }
 
     public function tearDown()
