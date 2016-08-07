@@ -30,7 +30,7 @@ class UsersController extends Controller
             'email.required' => 'The :attribute field is required.',
             'email.email' => 'The :attribute must be valid.',
             'email.unique' => 'This :attribute is already registered.',
-            
+
             'password.required' => 'The :attribute field is required.',
             'password.max' => 'The :attribute may not be greater than :max characters.',
         ]);
@@ -47,26 +47,29 @@ class UsersController extends Controller
         );
     }
 
-    // public function update(Request $request, $id)
-    // {
-    //     $link = Link::findOrFail($id);
+    public function update(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
 
-    //     $this->validate($request, [
-    //         'title' => 'required|max:255',
-    //         'url' => 'required|max:255',
-    //     ], [
-    //         'title.required' => 'The :attribute field is required.',
-    //         'title.max' => 'The :attribute may not be greater than :max characters.',
-            
-    //         'url.required' => 'The :attribute field is required.',
-    //         'url.max' => 'The :attribute may not be greater than :max characters.',
-    //     ]);
+        $this->validate($request, [
+            'email' => 'required|email|unique:users',
+            'password' => 'required|max:255',
+            // 'password_confirmation' => 'required|max:255',
+        ], [
+            'email.required' => 'The :attribute field is required.',
+            'email.email' => 'The :attribute must be valid.',
+            'email.unique' => 'This :attribute is already registered.',
 
-    //     $link->fill($request->all());
-    //     $link->save();
+            'password.required' => 'The :attribute field is required.',
+            'password.max' => 'The :attribute may not be greater than :max characters.',
+        ]);
 
-    //     return $this->item($link, new LinkTransformer());
-    // }
+        $user->email = $request->input('email');
+        $user->password = app('hash')->make($request->input('password'));
+        $user->save();
+
+        return $this->item($user, new UserTransformer());
+    }
 
     public function destroy($id)
     {
