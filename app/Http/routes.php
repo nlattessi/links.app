@@ -56,15 +56,32 @@ $app->group([
 //     return view()->make('client');
 // });
 
-// $app->group([
-//     'prefix' => 'api',
-//     'middleware' => 'oauth'
-// ], function () use ($app) {
-//     $app->get('resource', function() {
-//         return response()->json([
-//             "id" => 1,
-//             "name" => "A resource"
-//         ]);
-//     });
-// });
+$app->group([
+    'prefix' => 'api',
+    'middleware' => 'auth:api'
+], function () use ($app) {
+    $app->get('resource', function() {
+        return response()->json([
+            "id" => 1,
+            "name" => "A resource"
+        ]);
+    });
+});
 // OAuth2 test --- END
+
+// JWT --- START
+$app->post('/auth/login', 'AuthController@postLogin');
+$app->get('/auth/user', 'AuthController@getAuthenticatedUser');
+$app->group([
+    'prefix' => 'apiuser',
+    'middleware' => 'auth'
+], function () use ($app) {
+    $app->get('resource', function() {
+        $user = Auth::user();
+        return response()->json([
+            "id" => 1,
+            "name" => "A resource",
+            "user_email" => $user->getJWTIdentifier(),
+        ]);
+    });
+});
