@@ -4,8 +4,8 @@ namespace App\Auth;
 
 use GuzzleHttp\Client;
 
-class Proxy {
-
+class Proxy
+{
     public function attemptLogin($credentials)
     {
         return $this->proxy('password', $credentials);
@@ -16,9 +16,12 @@ class Proxy {
         $crypt = app()->make('encrypter');
         $request = app()->make('request');
 
-        return $this->proxy('refresh_token', [
-            'refresh_token' => $crypt->decrypt($request->cookie('refreshToken'))
-        ]);
+        return $this->proxy(
+            'refresh_token',
+            [
+                'refresh_token' => $crypt->decrypt($request->cookie('refreshToken'))
+            ]
+        );
     }
 
     private function proxy($grantType, array $data = [])
@@ -26,16 +29,21 @@ class Proxy {
         try {
             $config = app()->make('config');
 
-            $data = array_merge([
-                'client_id'     => $config->get('secrets.client_id'),
-                'client_secret' => $config->get('secrets.client_secret'),
-                'grant_type'    => $grantType
-            ], $data);
+            $data = array_merge(
+                [
+                    'client_id'     => $config->get('secrets.client_id'),
+                    'client_secret' => $config->get('secrets.client_secret'),
+                    'grant_type'    => $grantType
+                ],
+                $data
+            );
 
             $client = new Client();
-            $guzzleResponse = $client->post(sprintf('%s/oauth/access-token', $config->get('app.url')), [
+            $guzzleResponse = $client->post(
+                sprintf('%s/oauth/access-token', $config->get('app.url')), [
                 'form_params' => $data
-            ]);
+                ]
+            );
         } catch(\GuzzleHttp\Exception\BadResponseException $e) {
             $guzzleResponse = $e->getResponse();
         }
@@ -49,7 +57,8 @@ class Proxy {
             $encryptedToken = $crypt->encrypt($response->refresh_token);
 
             // Set the refresh token as an encrypted HttpOnly cookie
-            $cookie->queue('refreshToken',
+            $cookie->queue(
+                'refreshToken',
                 $crypt->encrypt($encryptedToken),
                 604800, // expiration, should be moved to a config file
                 null,
