@@ -36,6 +36,26 @@ $app->group([
 });
 // /users --- END
 
+// JWT --- START
+$app->post('/auth/login', 'AuthController@postLogin');
+$app->group(['middleware' => 'auth:api'], function($app)
+{
+    $app->get('/test', function() {
+        $user = Auth::user();
+        $forceForever = false;
+Auth::invalidate($forceForever);
+        return response()->json([
+            'message' => 'Hello World!',
+            'user' => $user->email,
+            'check' => Auth::check(),
+            'token' => Auth::getToken()
+        ]);
+    });
+});
+// JWT --- END
+
+
+
 // OAuth2 --- START
 // $app->post('login', function() use ($app) {
 //     $credentials = app()->make('request')->input("credentials");
@@ -56,32 +76,32 @@ $app->group([
 //     return view()->make('client');
 // });
 
-$app->group([
-    'prefix' => 'api',
-    'middleware' => 'auth:api'
-], function () use ($app) {
-    $app->get('resource', function() {
-        return response()->json([
-            "id" => 1,
-            "name" => "A resource"
-        ]);
-    });
-});
+// $app->group([
+//     'prefix' => 'api',
+//     'middleware' => 'auth:api'
+// ], function () use ($app) {
+//     $app->get('resource', function() {
+//         return response()->json([
+//             "id" => 1,
+//             "name" => "A resource"
+//         ]);
+//     });
+// });
 // OAuth2 test --- END
 
 // JWT --- START
-$app->post('/auth/login', 'AuthController@postLogin');
-$app->get('/auth/user', 'AuthController@getAuthenticatedUser');
-$app->group([
-    'prefix' => 'apiuser',
-    'middleware' => 'auth'
-], function () use ($app) {
-    $app->get('resource', function() {
-        $user = Auth::user();
-        return response()->json([
-            "id" => 1,
-            "name" => "A resource",
-            "user_email" => $user->getJWTIdentifier(),
-        ]);
-    });
-});
+// $app->post('/auth/login', 'AuthController@postLogin');
+// $app->get('/auth/user', 'AuthController@getAuthenticatedUser');
+// $app->group([
+//     'prefix' => 'apiuser',
+//     'middleware' => 'auth'
+// ], function () use ($app) {
+//     $app->get('resource', function() {
+//         $user = Auth::user();
+//         return response()->json([
+//             "id" => 1,
+//             "name" => "A resource",
+//             "user_email" => $user->getJWTIdentifier(),
+//         ]);
+//     });
+// });
