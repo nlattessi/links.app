@@ -66,6 +66,16 @@ class Handler extends ExceptionHandler
                 $response['status'] = Response::HTTP_NOT_FOUND;
             }
 
+            if ($e instanceof Tymon\JWTAuth\Exceptions\TokenExpiredException) {
+                // return response()->json(['token_expired'], $e->getStatusCode());
+                $response['message'] = 'token_expired';
+                $response['status'] = $e->getStatusCode();
+            } else if ($e instanceof Tymon\JWTAuth\Exceptions\TokenInvalidException) {
+                // return response()->json(['token_invalid'], $e->getStatusCode());
+                $response['message'] = 'token_invalid';
+                $response['status'] = $e->getStatusCode();
+            }
+
             if ($this->isDebugMode()) {
                 $response['debug'] = [
                     'exception' => get_class($e),
