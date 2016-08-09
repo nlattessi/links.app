@@ -22,7 +22,14 @@ class AuthController extends Controller
     {
         $this->validate($request, [
             'email'    => 'required|email|max:255',
-            'password' => 'required',
+            'password' => 'required|max:255',
+        ], [
+            'email.required' => 'The :attribute field is required.',
+            'email.email' => 'The :attribute must be valid.',
+            'email.max' => 'The :attribute may not be greater than :max characters.',
+
+            'password.required' => 'The :attribute field is required.',
+            'password.max' => 'The :attribute may not be greater than :max characters.',
         ]);
 
         try {

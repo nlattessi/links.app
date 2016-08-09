@@ -33,7 +33,7 @@ class FactoryTest extends TestCase
                     'id' => $user->id,
                     'email' => $user->email,
                     'password' => $user->password,
-                    'remember_token' => $user->remember_token,
+                    // 'remember_token' => $user->remember_token,
                     'created_at' => $user->created_at,
                     'updated_at' => $user->updated_at,
                 ]);
