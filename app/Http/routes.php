@@ -8,7 +8,7 @@ $app->get('/', function () use ($app) {
 $app->group([
     'prefix' => '/links',
     'namespace' => 'App\Http\Controllers',
-    'middleware' => 'oauth',
+    'middleware' => 'auth:api',
 ], function () use ($app) {
     $app->get('/', 'LinksController@index');
     $app->get('/{id: [\d]+}', [
@@ -24,7 +24,7 @@ $app->group([
 $app->group([
     'prefix' => '/users',
     'namespace' => 'App\Http\Controllers',
-    'middleware' => 'oauth',
+    'middleware' => 'auth:api',
 ], function () use ($app) {
     $app->get('/', 'UsersController@index');
     $app->get('/{id: [\d]+}', [
@@ -36,35 +36,19 @@ $app->group([
 });
 // /users --- END
 
-// OAuth2 --- START
-$app->post('login', function() use ($app) {
-    $credentials = app()->make('request')->input("credentials");
-    return $app->make('App\Auth\Proxy')->attemptLogin($credentials);
-});
-
-$app->post('refresh-token', function() use ($app) {
-    return $app->make('App\Auth\Proxy')->attemptRefresh();
-});
-
-$app->post('oauth/access-token', function() use ($app) {
-    return response()->json(Authorizer::issueAccessToken());
-});
-// OAuth2 --- END
-
-// OAuth2 test --- START
-$app->get('/client', function() use ($app) {
-    return view()->make('client');
-});
-
+// JWT --- START
+$app->post('/auth/login', 'AuthController@postLogin');
+// JWT-TEST
 $app->group([
-    'prefix' => 'api',
-    'middleware' => 'oauth'
+    'prefix' => '/jwt',
+    'namespace' => 'App\Http\Controllers',
+    'middleware' => 'auth:api',
 ], function () use ($app) {
-    $app->get('resource', function() {
+    $app->get('/test', function() {
         return response()->json([
-            "id" => 1,
-            "name" => "A resource"
+            'message' => 'Hello World!',
         ]);
     });
+    $app->get('/user', 'AuthController@getAuthenticatedUser');
 });
-// OAuth2 test --- END
+// JWT --- END

@@ -23,12 +23,13 @@ class UsersController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email|max:255|unique:users',
             'password' => 'required|max:255',
             // 'password_confirmation' => 'required|max:255',
         ], [
             'email.required' => 'The :attribute field is required.',
             'email.email' => 'The :attribute must be valid.',
+            'email.max' => 'The :attribute may not be greater than :max characters.',
             'email.unique' => 'This :attribute is already registered.',
 
             'password.required' => 'The :attribute field is required.',
@@ -52,12 +53,13 @@ class UsersController extends Controller
         $user = User::findOrFail($id);
 
         $this->validate($request, [
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email|max:255|unique:users',
             'password' => 'required|max:255',
             // 'password_confirmation' => 'required|max:255',
         ], [
             'email.required' => 'The :attribute field is required.',
             'email.email' => 'The :attribute must be valid.',
+            'email.max' => 'The :attribute may not be greater than :max characters.',
             'email.unique' => 'This :attribute is already registered.',
 
             'password.required' => 'The :attribute field is required.',
