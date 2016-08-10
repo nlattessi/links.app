@@ -25,15 +25,22 @@ class LinksController extends Controller
         $this->validate($request, [
             'title' => 'required|max:255',
             'url' => 'required|max:255',
+            // 'category_id' => 'required|exists:categories,id'
+            'category_id' => 'required|exists:categories,id'
         ], [
             'title.required' => 'The :attribute field is required.',
             'title.max' => 'The :attribute may not be greater than :max characters.',
             
             'url.required' => 'The :attribute field is required.',
             'url.max' => 'The :attribute may not be greater than :max characters.',
+
+            // 'category_id.required' => 'The :attribute field is required.',
+            // 'category_id.exists' => 'The :attribute must exist.',
         ]);
 
         $link = Link::create($request->all());
+
+        var_dump($link);die();
 
         return response()->json(
             $this->item($link, new LinkTransformer()),

@@ -10,13 +10,12 @@ class GetLinkTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-
         $this->app->instance('middleware.disable', true);
     }
 
     public function test_get_link()
     {
-        $link = factory(\App\Link::class)->create();
+        $link = $this->linkFactory();
 
         $this
             ->get("/links/{$link->id}", ['Accept' => 'application/json'])
@@ -30,6 +29,7 @@ class GetLinkTest extends TestCase
         $this->assertEquals($link->title, $data['title']);
         $this->assertEquals($link->url, $data['url']);
         $this->assertEquals($link->description, $data['description']);
+        $this->assertEquals($link->category->name, $data['category']);
         $this->assertEquals($link->created_at->toDateTimeString(), $data['created_at']);
         $this->assertEquals($link->updated_at->toDateTimeString(), $data['updated_at']);
     }

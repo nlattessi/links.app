@@ -34,4 +34,22 @@ class TestCase extends Laravel\Lumen\Testing\TestCase
 
         return $this;
     }
+
+    public function linkFactory($count = 1)
+    {
+        $category = factory(\App\Category::class)->create();
+        $links = factory(\App\Link::class, $count)->make();
+
+        if ($count === 1) {
+            $links->category()->associate($category);
+            $links->save();
+        } else {
+            foreach ($links as $link) {
+                $link->category()->associate($category);
+                $link->save();
+            }
+        }
+
+        return $links;
+    }
 }
