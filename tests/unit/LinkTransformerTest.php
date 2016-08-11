@@ -15,7 +15,6 @@ class LinkTransformerTest extends TestCase
 
     public function test_it_transforms_a_link_model()
     {
-        // $link = factory(\App\Link::class)->create();
         $link = $this->linkFactory();
         $transformer = new LinkTransformer();
 

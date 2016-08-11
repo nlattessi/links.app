@@ -15,7 +15,6 @@ class DeleteLinkTest extends TestCase
 
     public function test_delete_link()
     {
-        // $link = factory(\App\Link::class)->create();
         $link = $this->linkFactory();
 
         $this

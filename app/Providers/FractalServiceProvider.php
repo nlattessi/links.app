@@ -17,11 +17,13 @@ class FractalServiceProvider extends ServiceProvider
             $manager = new Manager();
             $serializer = $app['League\Fractal\Serializer\SerializerAbstract'];
 
-            return new FractalResponse($manager, $serializer);
+            return new FractalResponse($manager, $serializer, $app['request']);
         });
 
         $this->app->alias(FractalResponse::class, 'fractal');
     }
 
-    public function boot() {}
+    public function boot()
+    {
+    }
 }
