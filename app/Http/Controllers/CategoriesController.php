@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Category;
 use App\Transformers\CategoryTransformer;
 // use Illuminate\Database\Eloquent\ModelNotFoundException;
-// use Illuminate\Http\Request;
-// use Illuminate\Http\Response;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class CategoriesController extends Controller
 {
@@ -23,6 +23,21 @@ class CategoriesController extends Controller
         return $this->item(
             Category::findOrFail($id),
             new CategoryTransformer()
+        );
+    }
+
+    public function store(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'required',
+        ]);
+
+        $category = Category::create($request->all());
+
+        return response()->json(
+            $this->item($category, new CategoryTransformer()),
+            Response::HTTP_CREATED,
+            ['Location' => route('categories.show', ['id' => $category->id])]
         );
     }
 }
