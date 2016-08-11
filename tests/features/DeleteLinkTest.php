@@ -10,19 +10,20 @@ class DeleteLinkTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-
         $this->app->instance('middleware.disable', true);
     }
 
     public function test_delete_link()
     {
-        $link = factory(\App\Link::class)->create();
+        // $link = factory(\App\Link::class)->create();
+        $link = $this->linkFactory();
 
         $this
             ->seeInDatabase('links', [
                 'id' => $link->id,
                 'title' => $link->title,
                 'url' => $link->url,
+                'category_id' => $link->category->id,
                 'description' => $link->description,
                 'created_at' => $link->created_at,
                 'updated_at' => $link->updated_at,
