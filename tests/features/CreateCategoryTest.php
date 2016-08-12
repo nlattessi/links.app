@@ -43,7 +43,9 @@ class CreateCategoryTest extends TestCase
     /** @test **/
     public function store_method_validates_required_fields()
     {
-        $this->post('/categories', [], ['Accept' => 'application/json']);
+        $this
+            ->post('/categories', [], ['Accept' => 'application/json'])
+            ->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
 
         $data = $this->response->getData(true);
 

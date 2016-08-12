@@ -11,7 +11,6 @@ class UpdateLinkTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-
         Carbon::setTestNow(Carbon::now('UTC'));
         $this->app->instance('middleware.disable', true);
     }

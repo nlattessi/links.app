@@ -28,9 +28,7 @@ class CategoriesController extends Controller
 
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'name' => 'required|max:255',
-        ]);
+        $this->validateCategory($request);
 
         $category = Category::create($request->all());
 
@@ -39,5 +37,27 @@ class CategoriesController extends Controller
             Response::HTTP_CREATED,
             ['Location' => route('categories.show', ['id' => $category->id])]
         );
+    }
+
+    public function update(Request $request, $id)
+    {
+        $this->validateCategory($request);
+
+        $category = Category::findOrFail($id);
+
+        $category->fill($request->all());
+        $category->save();
+
+        return response()->json(
+            $this->item($category, new CategoryTransformer()),
+            Response::HTTP_OK
+        );
+    }
+
+    private function validateCategory(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'required|max:255',
+        ]);
     }
 }
