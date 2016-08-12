@@ -11,14 +11,12 @@ class CreateCategoryTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        // Carbon::setTestNow(Carbon::now('UTC'));
         $this->app->instance('middleware.disable', true);
     }
 
     public function tearDown()
     {
         parent::tearDown();
-        // Carbon::setTestNow();
     }
 
     /** @test **/
@@ -57,110 +55,59 @@ class CreateCategoryTest extends TestCase
         }
     }
 
-    // public function test_create_link()
-    // {
-    //     $category = factory(\App\Category::class)->create([
-    //         'name' => 'PHP'
-    //     ]);
+    /** @test **/
+    public function store_invalidates_name_when_name_is_just_too_long()
+    {
+        $postData = [
+            'name' => str_repeat('a', 256),
+            'description' => 'A valid description',
+        ];
 
-    //     $this
-    //         ->post('/links', [
-    //             'title' => 'Links app',
-    //             'url' => 'https://links.app',
-    //             'description' => 'A links storage service',
-    //             'category_id' => $category->id,
-    //         ], ['Accept' => 'application/json']);
+        $this
+            ->post('/categories', $postData, ['Accept' =>  'application/json'])
+            ->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
 
-    //     $this
-    //         ->seeStatusCode(Response::HTTP_CREATED)
-    //         ->seeHeaderWithRegExp('Location', '#/links/[\d]+$#');
+        $data = $this->response->getData(true);
+        $this->assertCount(1, $data);
+        $this->assertArrayHasKey('name', $data);
+        $this->assertEquals(
+            ["The name may not be greater than 255 characters."],
+            $data['name']
+        );
+    }
+
+    /** @test **/
+    public function store_is_valid_when_name_is_just_long_enough()
+    {
+        $postData = [
+            'name' => str_repeat('a', 255),
+            'description' => 'A valid description',
+        ];
+
+        $this
+            ->post('/categories', $postData, ['Accept' =>  'application/json'])
+            ->seeStatusCode(Response::HTTP_CREATED);
+
+        $this->seeInDatabase('categories', $postData);
+    }
+
+    /** @test **/
+    public function store_returns_a_valid_location_header()
+    {
+        $postData = [
+            'name' => 'PHP',
+            'description' => 'PHP, Laravel, Lumen and related topics',
+        ];
+
+        $this
+            ->post('/categories', $postData, ['Accept' =>  'application/json'])
+            ->seeStatusCode(Response::HTTP_CREATED);
         
-    //     $body = json_decode($this->response->getContent(), true);
-    //     $this->assertArrayHasKey('data', $body);
+        $data = $this->response->getData(true);
+        $this->assertArrayHasKey('data', $data);
+        $this->assertArrayHasKey('id', $data['data']);
 
-    //     $data = $body['data'];
-    //     $this->assertTrue($data['id'] > 0, 'Expected a positive integer, but did not see one');
-    //     $this->assertEquals('Links app', $data['title']);
-    //     $this->assertEquals('https://links.app', $data['url']);
-    //     $this->assertEquals('A links storage service', $data['description']);
-    //     $this->assertEquals('PHP', $data['category']);
-    //     $this->assertEquals(Carbon::now()->toDateTimeString(), $data['created_at']);
-    //     $this->assertEquals(Carbon::now()->toDateTimeString(), $data['updated_at']);
-
-    //     $this->seeInDatabase('links', ['url' => "https://links.app"]);
-    // }
-
-    // public function test_it_validates_required_fields_when_creating_a_new_link()
-    // {
-    //     $this
-    //         ->post('/links', [], ['Accept' => 'application/json'])
-    //         ->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
-
-    //     $body = json_decode($this->response->getContent(), true);
-
-    //     $this->assertArrayHasKey('title', $body);
-    //     $this->assertArrayHasKey('url', $body);
-    //     $this->assertArrayHasKey('category_id', $body);
-
-    //     $this->assertEquals(['The title field is required.'], $body['title']);
-    //     $this->assertEquals(['The url field is required.'], $body['url']);
-    //     $this->assertEquals(['The category id field is required.'], $body['category_id']);
-    // }
-
-    // public function test_create_fails_pass_validation_when_title_is_too_long()
-    // {
-    //     $link = $this->linkFactory();
-    //     $link->title = str_repeat('a', 256);
-
-    //     $this
-    //         ->post('/links', [
-    //             'title' => $link->title,
-    //             'url' => $link->url,
-    //             'description' => $link->description,
-    //             'category_id' => $link->category->id,
-    //         ], ['Accept' => 'application/json']);
-
-    //     $this
-    //         ->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)
-    //         ->seeJson([
-    //             'title' => ['The title may not be greater than 255 characters.'],
-    //         ])
-    //         ->notSeeInDatabase('links', ['title' => $link->title]);
-    // }
-
-    // public function test_create_passes_validation_when_title_is_exactly_max()
-    // {
-    //     $link = $this->linkFactory();
-    //     $link->title = str_repeat('a', 255);
-
-    //     $this
-    //         ->post('/links', [
-    //             'title' => $link->title,
-    //             'url' => $link->url,
-    //             'description' => $link->description,
-    //             'category_id' => $link->category->id,
-    //         ], ['Accept' => 'application/json']);
-
-    //     $this
-    //         ->seeStatusCode(Response::HTTP_CREATED)
-    //         ->seeInDatabase('links', ['title' => $link->title]);
-    // }
-
-    // public function test_create_fails_pass_validation_when_category_id_not_exists()
-    // {
-    //     $this
-    //         ->post('/links', [
-    //             'title' => 'Links app',
-    //             'url' => 'https://links.app',
-    //             'description' => 'A links storage service',
-    //             'category_id' => 999,
-    //         ], ['Accept' => 'application/json']);
-
-    //     $this
-    //         ->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)
-    //         ->seeJson([
-    //             'category_id' => ['The selected category id is invalid.'],
-    //         ])
-    //         ->notSeeInDatabase('links', ['title' => 'Links app']);
-    // }
+        $id = $data['data']['id'];
+        $this->seeHeaderWithRegExp('Location', "#/categories/{$id}$#");
+    }
 }
