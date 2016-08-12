@@ -11,7 +11,6 @@ class UpdateLinkTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-
         Carbon::setTestNow(Carbon::now('UTC'));
         $this->app->instance('middleware.disable', true);
     }
@@ -19,13 +18,12 @@ class UpdateLinkTest extends TestCase
     public function tearDown()
     {
         parent::tearDown();
-
         Carbon::setTestNow();
     }
 
     public function test_update_link()
     {
-        $link = factory(\App\Link::class)->create();
+        $link = $this->linkFactory();
 
         $this->notSeeInDatabase('links', [
             'title' => 'Links app',
@@ -35,6 +33,7 @@ class UpdateLinkTest extends TestCase
 
         $this
             ->put("/links/{$link->id}", [
+                'id' => 5,
                 'title' => 'Links app',
                 'url' => 'https://links.app',
                 'description' => 'A links storage service',
@@ -89,7 +88,7 @@ class UpdateLinkTest extends TestCase
 
     public function test_it_validates_required_fields_when_updating_a_link()
     {
-        $link = factory(\App\Link::class)->create();
+        $link = $this->linkFactory();
 
         $this->put("/links/{$link->id}", [], ['Accept' => 'application/json']);
         
@@ -109,7 +108,7 @@ class UpdateLinkTest extends TestCase
 
     public function test_update_fails_pass_validation_when_title_is_too_long()
     {
-        $link = factory(\App\Link::class)->create();
+        $link = $this->linkFactory();
         $link->title = str_repeat('a', 256);
 
         $this
@@ -117,6 +116,7 @@ class UpdateLinkTest extends TestCase
                 'title' => $link->title,
                 'url' => $link->url,
                 'description' => $link->description,
+                'category_id' => $link->category->id,
             ], ['Accept' => 'application/json']);
 
         $this
@@ -129,7 +129,7 @@ class UpdateLinkTest extends TestCase
 
     public function test_update_passes_validation_when_title_is_exactly_max()
     {
-        $link = factory(\App\Link::class)->create();
+        $link = $this->linkFactory();
         $link->title = str_repeat('a', 255);
 
         $this
@@ -137,6 +137,7 @@ class UpdateLinkTest extends TestCase
                 'title' => $link->title,
                 'url' => $link->url,
                 'description' => $link->description,
+                'category_id' => $link->category->id,
             ], ['Accept' => 'application/json']);
 
         $this

@@ -10,13 +10,12 @@ class GetLinksTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-
         $this->app->instance('middleware.disable', true);
     }
 
     public function test_get_links()
     {
-        $links = factory(\App\Link::class, 5)->create();
+        $links = $this->linkFactory(5);
 
         $this
             ->get('/links', ['Accept' => 'application/json'])
@@ -31,6 +30,7 @@ class GetLinksTest extends TestCase
                 'title' => $link->title,
                 'url' => $link->url,
                 'description' => $link->description,
+                'category' => $link->category->name,
                 'created_at' => $link->created_at->toDateTimeString(),
                 'updated_at' => $link->updated_at->toDateTimeString(),
             ]);

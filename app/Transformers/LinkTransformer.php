@@ -14,6 +14,7 @@ class LinkTransformer extends TransformerAbstract
             'title' => $link->title,
             'url' => $link->url,
             'description' => $link->description,
+            'category' => $link->category->name,
             'created_at' => $link->created_at->toDateTimeString(),
             'updated_at' => $link->updated_at->toDateTimeString(),
         ];

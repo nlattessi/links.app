@@ -20,6 +20,22 @@ $app->group([
 });
 // /links --- END
 
+// /categories --- START
+$app->group([
+    'prefix' => '/categories',
+    'namespace' => 'App\Http\Controllers',
+    'middleware' => 'auth:api',
+], function (\Laravel\Lumen\Application $app) {
+    $app->get('/', 'CategoriesController@index');
+    $app->get('/{id: [\d]+}', [
+        'as' => 'categories.show', 'uses' => 'CategoriesController@show',
+    ]);
+    $app->post('/', 'CategoriesController@store');
+    $app->put('/{id: [\d]+}', 'CategoriesController@update');
+    $app->delete('/{id: [\d]+}', 'CategoriesController@destroy');
+});
+// /categories --- END
+
 // /users --- START
 $app->group([
     'prefix' => '/users',

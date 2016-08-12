@@ -12,7 +12,6 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call('LinksSeeder');
-        // $this->call('OAuthSeeder');
         $this->call('UserSeeder');
     }
 }

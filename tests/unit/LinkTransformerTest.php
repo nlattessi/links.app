@@ -15,7 +15,7 @@ class LinkTransformerTest extends TestCase
 
     public function test_it_transforms_a_link_model()
     {
-        $link = factory(\App\Link::class)->create();
+        $link = $this->linkFactory();
         $transformer = new LinkTransformer();
 
         $transformedLink = $transformer->transform($link);
@@ -24,6 +24,7 @@ class LinkTransformerTest extends TestCase
         $this->assertArrayHasKey('title', $transformedLink);
         $this->assertArrayHasKey('url', $transformedLink);
         $this->assertArrayHasKey('description', $transformedLink);
+        $this->assertArrayHasKey('category', $transformedLink);
         $this->assertArrayHasKey('created_at', $transformedLink);
         $this->assertArrayHasKey('updated_at', $transformedLink);
     }

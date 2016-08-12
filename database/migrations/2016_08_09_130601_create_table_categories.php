@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableLinks extends Migration
+class CreateTableCategories extends Migration
 {
     /**
      * Run the migrations.
@@ -12,10 +12,9 @@ class CreateTableLinks extends Migration
      */
     public function up()
     {
-        Schema::create('links', function (Blueprint $table) {
+        Schema::create('categories', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title');
-            $table->string('url');
+            $table->string('name');
             $table->text('description');
             $table->timestamps();
         });
@@ -28,6 +27,6 @@ class CreateTableLinks extends Migration
      */
     public function down()
     {
-        Schema::drop('links');
+        Schema::drop('categories');
     }
 }
