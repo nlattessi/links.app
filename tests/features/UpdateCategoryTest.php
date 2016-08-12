@@ -11,14 +11,12 @@ class UpdateCategoryTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        // Carbon::setTestNow(Carbon::now('UTC'));
         $this->app->instance('middleware.disable', true);
     }
 
     public function tearDown()
     {
         parent::tearDown();
-        // Carbon::setTestNow();
     }
 
     /** @test **/
@@ -59,7 +57,8 @@ class UpdateCategoryTest extends TestCase
         }
     }
 
-    public function update_should_fail_if_category_not_exist()
+    /*+ @test **/
+    public function updating_an_invalid_category_should_return_a_404()
     {
         $this
             ->put('categories/999', [], ['Accept' => 'application/json'])
@@ -72,7 +71,8 @@ class UpdateCategoryTest extends TestCase
             ]);
     }
 
-    public function test_should_not_match_an_invalid_route()
+    /** @test **/
+    public function update_should_not_match_an_invalid_route()
     {
         $this->put('/categories/invalid-route', [], ['Accept' => 'application/json']);
 
@@ -127,43 +127,4 @@ class UpdateCategoryTest extends TestCase
 
         $this->seeInDatabase('categories', $postData);
     }
-
-    // public function test_update_fails_pass_validation_when_title_is_too_long()
-    // {
-    //     $link = $this->linkFactory();
-    //     $link->title = str_repeat('a', 256);
-
-    //     $this
-    //         ->put("/links/{$link->id}", [
-    //             'title' => $link->title,
-    //             'url' => $link->url,
-    //             'description' => $link->description,
-    //             'category_id' => $link->category->id,
-    //         ], ['Accept' => 'application/json']);
-
-    //     $this
-    //         ->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)
-    //         ->seeJson([
-    //             'title' => ['The title may not be greater than 255 characters.'],
-    //         ])
-    //         ->notSeeInDatabase('links', ['title' => $link->title]);
-    // }
-
-    // public function test_update_passes_validation_when_title_is_exactly_max()
-    // {
-    //     $link = $this->linkFactory();
-    //     $link->title = str_repeat('a', 255);
-
-    //     $this
-    //         ->put("/links/{$link->id}", [
-    //             'title' => $link->title,
-    //             'url' => $link->url,
-    //             'description' => $link->description,
-    //             'category_id' => $link->category->id,
-    //         ], ['Accept' => 'application/json']);
-
-    //     $this
-    //         ->seeStatusCode(Response::HTTP_OK)
-    //         ->seeInDatabase('links', ['title' => $link->title]);
-    // }
 }

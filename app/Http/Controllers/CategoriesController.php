@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\Transformers\CategoryTransformer;
-// use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -52,6 +51,13 @@ class CategoriesController extends Controller
             $this->item($category, new CategoryTransformer()),
             Response::HTTP_OK
         );
+    }
+
+    public function destroy($id)
+    {
+        Category::findOrFail($id)->delete();
+
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 
     private function validateCategory(Request $request)
