@@ -62,7 +62,10 @@ class UpdateUserTest extends TestCase
     public function test_should_fail_if_id_not_exist()
     {
         $this
-            ->put('links/999', [], ['Accept' => 'application/json'])
+            ->put('users/999', [
+                'email' => 'user@email.com',
+                'password' => 'password',
+            ], ['Accept' => 'application/json'])
             ->seeStatusCode(Response::HTTP_NOT_FOUND)
             ->seeJson([
                 'error' => [

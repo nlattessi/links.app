@@ -11,6 +11,7 @@ class CreateLinkTest extends TestCase
     public function setUp()
     {
         parent::setUp();
+
         Carbon::setTestNow(Carbon::now('UTC'));
         $this->app->instance('middleware.disable', true);
     }
@@ -18,6 +19,7 @@ class CreateLinkTest extends TestCase
     public function tearDown()
     {
         parent::tearDown();
+
         Carbon::setTestNow();
     }
 

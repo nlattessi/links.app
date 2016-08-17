@@ -27,6 +27,7 @@ class GetLinksTest extends TestCase
         foreach ($links as $link) {
             $this->seeJson([
                 'id' => $link->id,
+                'uuid' => $link->uuid,
                 'title' => $link->title,
                 'url' => $link->url,
                 'description' => $link->description,

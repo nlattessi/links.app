@@ -11,6 +11,7 @@ class UpdateLinkTest extends TestCase
     public function setUp()
     {
         parent::setUp();
+
         Carbon::setTestNow(Carbon::now('UTC'));
         $this->app->instance('middleware.disable', true);
     }
@@ -18,6 +19,7 @@ class UpdateLinkTest extends TestCase
     public function tearDown()
     {
         parent::tearDown();
+
         Carbon::setTestNow();
     }
 
@@ -34,15 +36,18 @@ class UpdateLinkTest extends TestCase
         $this
             ->put("/links/{$link->id}", [
                 'id' => 5,
+                'uuid' => '25769c6c-d34d-4bfe-ba98-e0ee856f3e7a',
                 'title' => 'Links app',
                 'url' => 'https://links.app',
                 'description' => 'A links storage service',
+                'category_id' => $link->category->id,
             ], ['Accept' => 'application/json']);
 
         $this
             ->seeStatusCode(Response::HTTP_OK)
             ->seeJson([
                 'id' => $link->id,
+                'uuid' => $link->uuid,
                 'title' => 'Links app',
                 'url' => 'https://links.app',
                 'description' => 'A links storage service',
@@ -63,8 +68,19 @@ class UpdateLinkTest extends TestCase
 
     public function test_should_fail_if_id_not_exist()
     {
+        $category = factory(\App\Category::class)->create();
+
         $this
-            ->put('links/999', [], ['Accept' => 'application/json'])
+            ->put('/links/999', [
+                'id' => 5,
+                'uuid' => '25769c6c-d34d-4bfe-ba98-e0ee856f3e7a',
+                'title' => 'Links app',
+                'url' => 'https://links.app',
+                'description' => 'A links storage service',
+                'category_id' => $category->id,
+            ], ['Accept' => 'application/json']);
+
+        $this
             ->seeStatusCode(Response::HTTP_NOT_FOUND)
             ->seeJson([
                 'error' => [

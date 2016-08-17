@@ -26,6 +26,7 @@ class GetLinkTest extends TestCase
 
         $data = $body['data'];
         $this->assertEquals($link->id, $data['id']);
+        $this->assertEquals($link->uuid, $data['uuid']);
         $this->assertEquals($link->title, $data['title']);
         $this->assertEquals($link->url, $data['url']);
         $this->assertEquals($link->description, $data['description']);

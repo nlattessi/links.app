@@ -10,6 +10,7 @@ class DeleteLinkTest extends TestCase
     public function setUp()
     {
         parent::setUp();
+
         $this->app->instance('middleware.disable', true);
     }
 
@@ -20,6 +21,7 @@ class DeleteLinkTest extends TestCase
         $this
             ->seeInDatabase('links', [
                 'id' => $link->id,
+                'uuid' => $link->uuid,
                 'title' => $link->title,
                 'url' => $link->url,
                 'category_id' => $link->category->id,
