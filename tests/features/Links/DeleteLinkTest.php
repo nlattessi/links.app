@@ -10,7 +10,6 @@ class DeleteLinkTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-
         $this->app->instance('middleware.disable', true);
     }
 

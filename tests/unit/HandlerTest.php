@@ -80,6 +80,21 @@ class HandlerTest extends TestCase
                 'message' => Response::$statusTexts[Response::HTTP_NOT_FOUND],
                 'status' => Response::HTTP_NOT_FOUND,
             ],
+            [
+                'mock' => \Tymon\JWTAuth\Exceptions\TokenExpiredException::class,
+                'message' => 'token_expired',
+                'status' => 400,
+            ],
+            [
+                'mock' => \Tymon\JWTAuth\Exceptions\TokenInvalidException::class,
+                'message' => 'token_invalid',
+                'status' => 400,
+            ],
+            [
+                'mock' => \Tymon\JWTAuth\Exceptions\JWTException::class,
+                'message' => 'token_absent',
+                'status' => 500,
+            ],
         ];
 
         foreach ($exceptions as $e) {

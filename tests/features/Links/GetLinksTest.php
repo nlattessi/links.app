@@ -32,8 +32,6 @@ class GetLinksTest extends TestCase
                 'url' => $link->url,
                 'description' => $link->description,
                 'category' => $link->category->name,
-                'created_at' => $link->created_at->toDateTimeString(),
-                'updated_at' => $link->updated_at->toDateTimeString(),
             ]);
         }
     }

@@ -39,8 +39,6 @@ class GetCategoriesTest extends TestCase
                 'id' => $category->id,
                 'name' => $category->name,
                 'description' => $category->description,
-                'created_at' => $category->created_at->toDateTimeString(),
-                'updated_at' => $category->updated_at->toDateTimeString(),
             ]);
         }
     }
@@ -78,7 +76,5 @@ class GetCategoriesTest extends TestCase
         $this->assertEquals($link->title, $actual['title']);
         $this->assertEquals($link->url, $actual['url']);
         $this->assertEquals($link->description, $actual['description']);
-        $this->assertEquals($link->created_at->toDateTimeString(), $actual['created_at']);
-        $this->assertEquals($link->updated_at->toDateTimeString(), $actual['updated_at']);
     }
 }

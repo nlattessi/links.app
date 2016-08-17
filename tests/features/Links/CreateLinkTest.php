@@ -1,6 +1,5 @@
 <?php
 
-use Carbon\Carbon;
 use Illuminate\Http\Response;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 
@@ -11,16 +10,7 @@ class CreateLinkTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-
-        Carbon::setTestNow(Carbon::now('UTC'));
         $this->app->instance('middleware.disable', true);
-    }
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        Carbon::setTestNow();
     }
 
     public function test_create_link()
@@ -50,8 +40,6 @@ class CreateLinkTest extends TestCase
         $this->assertEquals('https://links.app', $data['url']);
         $this->assertEquals('A links storage service', $data['description']);
         $this->assertEquals('PHP', $data['category']);
-        $this->assertEquals(Carbon::now()->toDateTimeString(), $data['created_at']);
-        $this->assertEquals(Carbon::now()->toDateTimeString(), $data['updated_at']);
 
         $this->seeInDatabase('links', ['url' => "https://links.app"]);
     }
