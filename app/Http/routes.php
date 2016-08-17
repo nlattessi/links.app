@@ -1,5 +1,12 @@
 <?php
 
+// [0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}
+$uuidRegex = '[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]'
+    . '-[0-9a-f][0-9a-f][0-9a-f][0-9a-f]'
+    . '-4[0-9a-f][0-9a-f][0-9a-f]'
+    . '-[89ab][0-9a-f][0-9a-f][0-9a-f]'
+    . '-[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]';
+
 $app->get('/', function () use ($app) {
     return $app->version();
 });
@@ -9,14 +16,15 @@ $app->group([
     'prefix' => '/links',
     'namespace' => 'App\Http\Controllers',
     'middleware' => 'auth:api',
-], function () use ($app) {
+], function () use ($app, $uuidRegex) {
     $app->get('/', 'LinksController@index');
-    $app->get('/{id: [\d]+}', [
-        'as' => 'links.show', 'uses' => 'LinksController@show',
+    $app->get("/{uuid: ${uuidRegex}}", [
+        'as' => 'links.show',
+        'uses' => 'LinksController@show',
     ]);
     $app->post('/', 'LinksController@store');
-    $app->put('/{id: [\d]+}', 'LinksController@update');
-    $app->delete('/{id: [\d]+}', 'LinksController@destroy');
+    $app->put("/{uuid: ${uuidRegex}}", 'LinksController@update');
+    $app->delete("/{uuid: ${uuidRegex}}", 'LinksController@destroy');
 });
 // /links --- END
 

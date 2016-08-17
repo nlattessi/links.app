@@ -77,6 +77,11 @@ class Handler extends ExceptionHandler
                 $response['status'] = Response::HTTP_INTERNAL_SERVER_ERROR;
             }
 
+            if ($e instanceof \Ramsey\Uuid\Exception\UnsatisfiedDependencyException) {
+                $response['message'] = $e->getMessage();
+                $response['status'] = Response::HTTP_INTERNAL_SERVER_ERROR;
+            }
+
             if ($this->isDebugMode()) {
                 $response['debug'] = [
                     'exception' => get_class($e),

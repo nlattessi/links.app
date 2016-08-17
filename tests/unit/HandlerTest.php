@@ -83,17 +83,22 @@ class HandlerTest extends TestCase
             [
                 'mock' => \Tymon\JWTAuth\Exceptions\TokenExpiredException::class,
                 'message' => 'token_expired',
-                'status' => 400,
+                'status' => Response::HTTP_BAD_REQUEST,
             ],
             [
                 'mock' => \Tymon\JWTAuth\Exceptions\TokenInvalidException::class,
                 'message' => 'token_invalid',
-                'status' => 400,
+                'status' => Response::HTTP_BAD_REQUEST,
             ],
             [
                 'mock' => \Tymon\JWTAuth\Exceptions\JWTException::class,
                 'message' => 'token_absent',
-                'status' => 500,
+                'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
+            ],
+            [
+                'mock' => \Ramsey\Uuid\Exception\UnsatisfiedDependencyException::class,
+                'message' => '',
+                'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
             ],
         ];
 

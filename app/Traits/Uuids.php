@@ -1,9 +1,8 @@
 <?php
 
-namespace App;
+namespace App\Traits;
 
 use Ramsey\Uuid\Uuid;
-use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
 
 trait Uuids
 {

@@ -24,7 +24,7 @@ class UpdateLinkTest extends TestCase
         ]);
 
         $this
-            ->put("/links/{$link->id}", [
+            ->put("/links/{$link->uuid}", [
                 'id' => 5,
                 'uuid' => '25769c6c-d34d-4bfe-ba98-e0ee856f3e7a',
                 'title' => 'Links app',
@@ -50,12 +50,12 @@ class UpdateLinkTest extends TestCase
         $this->notSeeInDatabase('links', ['url' => $link->url]);
     }
 
-    public function test_should_fail_if_id_not_exist()
+    public function test_should_fail_if_uuid_not_exist()
     {
         $category = factory(\App\Category::class)->create();
 
         $this
-            ->put('/links/999', [
+            ->put('/links/25769c6c-d34d-4bfe-ba98-e0ee856f3e7a', [
                 'id' => 5,
                 'uuid' => '25769c6c-d34d-4bfe-ba98-e0ee856f3e7a',
                 'title' => 'Links app',
@@ -90,7 +90,7 @@ class UpdateLinkTest extends TestCase
     {
         $link = $this->linkFactory();
 
-        $this->put("/links/{$link->id}", [], ['Accept' => 'application/json']);
+        $this->put("/links/{$link->uuid}", [], ['Accept' => 'application/json']);
         
         $this->assertEquals(
             Response::HTTP_UNPROCESSABLE_ENTITY,
@@ -112,7 +112,7 @@ class UpdateLinkTest extends TestCase
         $link->title = str_repeat('a', 256);
 
         $this
-            ->put("/links/{$link->id}", [
+            ->put("/links/{$link->uuid}", [
                 'title' => $link->title,
                 'url' => $link->url,
                 'description' => $link->description,
@@ -133,7 +133,7 @@ class UpdateLinkTest extends TestCase
         $link->title = str_repeat('a', 255);
 
         $this
-            ->put("/links/{$link->id}", [
+            ->put("/links/{$link->uuid}", [
                 'title' => $link->title,
                 'url' => $link->url,
                 'description' => $link->description,

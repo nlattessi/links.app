@@ -17,10 +17,10 @@ class LinksController extends Controller
         );
     }
 
-    public function show($id)
+    public function show($uuid)
     {
         return $this->item(
-            Link::findOrFail($id),
+            Link::where('uuid', $uuid)->firstOrFail(),
             new LinkTransformer()
         );
     }
@@ -34,15 +34,15 @@ class LinksController extends Controller
         return response()->json(
             $this->item($link, new LinkTransformer()),
             Response::HTTP_CREATED,
-            ['Location' => route('links.show', ['id' => $link->id])]
+            ['Location' => route('links.show', ['uuid' => $link->uuid])]
         );
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $uuid)
     {
         $this->validateLink($request);
 
-        $link = Link::findOrFail($id);
+        $link = Link::where('uuid', $uuid)->firstOrFail();
 
         $link->fill($request->all());
         $link->save();
@@ -53,9 +53,9 @@ class LinksController extends Controller
         );
     }
 
-    public function destroy($id)
+    public function destroy($uuid)
     {
-        Link::findOrFail($id)->delete();
+        Link::where('uuid', $uuid)->firstOrFail()->delete();
 
         return response(null, Response::HTTP_NO_CONTENT);
     }

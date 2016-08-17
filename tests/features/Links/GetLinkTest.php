@@ -18,7 +18,7 @@ class GetLinkTest extends TestCase
         $link = $this->linkFactory();
 
         $this
-            ->get("/links/{$link->id}", ['Accept' => 'application/json'])
+            ->get("/links/{$link->uuid}", ['Accept' => 'application/json'])
             ->seeStatusCode(Response::HTTP_OK);
 
         $body = json_decode($this->response->getContent(), true);
@@ -33,10 +33,10 @@ class GetLinkTest extends TestCase
         $this->assertEquals($link->category->name, $data['category']);
     }
 
-    public function test_should_fail_if_link_id_not_exist()
+    public function test_should_fail_if_link_uuid_not_exist()
     {
         $this
-            ->get('links/999', ['Accept' => 'application/json'])
+            ->get('links/25769c6c-d34d-4bfe-ba98-e0ee856f3e7a', ['Accept' => 'application/json'])
             ->seeStatusCode(Response::HTTP_NOT_FOUND)
             ->seeJson([
                 'error' => [
