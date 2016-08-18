@@ -27,8 +27,7 @@ class GetCategoryTest extends TestCase
         $this->assertArrayHasKey('data', $body);
 
         $this->seeJson([
-            'id' => $category->id,
-            'uuid' => $category->uuid,
+            'id' => $category->uuid,
             'name' => $category->name,
             'description' => $category->description,
         ]);

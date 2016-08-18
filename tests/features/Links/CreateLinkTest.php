@@ -24,7 +24,7 @@ class CreateLinkTest extends TestCase
                 'title' => 'Links app',
                 'url' => 'https://links.app',
                 'description' => 'A links storage service',
-                'category_id' => $category->id,
+                'category_id' => $category->uuid,
             ], ['Accept' => 'application/json']);
 
         $this
@@ -92,7 +92,7 @@ class CreateLinkTest extends TestCase
                 'title' => $link->title,
                 'url' => $link->url,
                 'description' => $link->description,
-                'category_id' => $link->category->id,
+                'category_id' => $link->category->uuid,
             ], ['Accept' => 'application/json']);
 
         $this
@@ -114,6 +114,24 @@ class CreateLinkTest extends TestCase
             ->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->seeJson([
                 'category_id' => ['The selected category id is invalid.'],
+            ])
+            ->notSeeInDatabase('links', ['title' => 'Links app']);
+    }
+
+    public function test_create_fails_pass_validation_when_category_id_is_not_uuid()
+    {
+        $this
+            ->post('/links', [
+                'title' => 'Links app',
+                'url' => 'https://links.app',
+                'description' => 'A links storage service',
+                'category_id' => 'abc',
+            ], ['Accept' => 'application/json']);
+
+        $this
+            ->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->seeJson([
+                'category_id' => ['The category id format is invalid.'],
             ])
             ->notSeeInDatabase('links', ['title' => 'Links app']);
     }

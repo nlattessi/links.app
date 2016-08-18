@@ -36,8 +36,7 @@ class GetCategoriesTest extends TestCase
 
         foreach ($categories as $category) {
             $this->seeJson([
-                'id' => $category->id,
-                'uuid' => $category->uuid,
+                'id' => $category->uuid,
                 'name' => $category->name,
                 'description' => $category->description,
             ]);
@@ -67,8 +66,7 @@ class GetCategoriesTest extends TestCase
 
         // See category data
         $this->seeJson([
-            'id' => $category->id,
-            'uuid'=> $category->uuid,
+            'id' => $category->uuid,
             'name' => $category->name,
             'description' => $category->description,
         ]);

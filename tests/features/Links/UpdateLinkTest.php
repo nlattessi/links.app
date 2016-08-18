@@ -30,7 +30,7 @@ class UpdateLinkTest extends TestCase
                 'title' => 'Links app',
                 'url' => 'https://links.app',
                 'description' => 'A links storage service',
-                'category_id' => $link->category->id,
+                'category_id' => $link->category->uuid,
             ], ['Accept' => 'application/json']);
 
         $this
@@ -55,12 +55,10 @@ class UpdateLinkTest extends TestCase
 
         $this
             ->put('/links/25769c6c-d34d-4bfe-ba98-e0ee856f3e7a', [
-                'id' => 5,
-                'uuid' => '25769c6c-d34d-4bfe-ba98-e0ee856f3e7a',
                 'title' => 'Links app',
                 'url' => 'https://links.app',
                 'description' => 'A links storage service',
-                'category_id' => $category->id,
+                'category_id' => $category->uuid,
             ], ['Accept' => 'application/json']);
 
         $this
@@ -117,7 +115,7 @@ class UpdateLinkTest extends TestCase
                 'title' => $link->title,
                 'url' => $link->url,
                 'description' => $link->description,
-                'category_id' => $link->category->id,
+                'category_id' => $link->category->uuid,
             ], ['Accept' => 'application/json']);
 
         $this
@@ -138,11 +136,31 @@ class UpdateLinkTest extends TestCase
                 'title' => $link->title,
                 'url' => $link->url,
                 'description' => $link->description,
-                'category_id' => $link->category->id,
+                'category_id' => $link->category->uuid,
             ], ['Accept' => 'application/json']);
 
         $this
             ->seeStatusCode(Response::HTTP_OK)
             ->seeInDatabase('links', ['title' => $link->title]);
+    }
+
+    public function test_update_fails_pass_validation_when_category_id_is_not_uuid()
+    {
+        $link = $this->linkFactory();
+
+        $this
+            ->put("/links/{$link->uuid}", [
+                'title' => 'Links app',
+                'url' => 'https://links.app',
+                'description' => 'A links storage service',
+                'category_id' => 'abc',
+            ], ['Accept' => 'application/json']);
+
+        $this
+            ->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->seeJson([
+                'category_id' => ['The category id format is invalid.'],
+            ])
+            ->notSeeInDatabase('links', ['title' => 'Links app']);
     }
 }

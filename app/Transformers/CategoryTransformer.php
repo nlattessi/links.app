@@ -14,8 +14,7 @@ class CategoryTransformer extends TransformerAbstract
     public function transform(Category $category)
     {
         return [
-            'id' => $category->id,
-            'uuid' => $category->uuid,
+            'id' => $category->uuid,
             'name' => $category->name,
             'description' => $category->description,
         ];
