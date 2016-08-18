@@ -37,6 +37,7 @@ class GetCategoriesTest extends TestCase
         foreach ($categories as $category) {
             $this->seeJson([
                 'id' => $category->id,
+                'uuid' => $category->uuid,
                 'name' => $category->name,
                 'description' => $category->description,
             ]);
@@ -64,15 +65,16 @@ class GetCategoriesTest extends TestCase
         $this->assertArrayHasKey('data', $data['links']);
         $this->assertCount(1, $data['links']['data']);
 
-        // See Category Data
+        // See category data
         $this->seeJson([
             'id' => $category->id,
             'name' => $category->name,
         ]);
 
-        // Test included link Data (the first record)
+        // Test included link data (the first record)
         $actual = $data['links']['data'][0];
         $this->assertEquals($link->id, $actual['id']);
+        $this->assertEquals($link->uuid, $actual['uuid']);
         $this->assertEquals($link->title, $actual['title']);
         $this->assertEquals($link->url, $actual['url']);
         $this->assertEquals($link->description, $actual['description']);

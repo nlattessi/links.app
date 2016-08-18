@@ -28,6 +28,7 @@ class GetCategoryTest extends TestCase
 
         $this->seeJson([
             'id' => $category->id,
+            'uuid' => $category->uuid,
             'name' => $category->name,
             'description' => $category->description,
         ]);

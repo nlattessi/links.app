@@ -24,6 +24,24 @@ class FactoryTest extends TestCase
         }
     }
 
+    /** @test **/
+    public function test_factory_categories_created_are_in_database()
+    {
+        $categories = factory(\App\Category::class, 5)->create();
+
+        foreach ($categories as $category) {
+            $this
+                ->seeInDatabase('categories', [
+                    'id' => $category->id,
+                    'uuid' => $category->uuid,
+                    'name' => $category->name,
+                    'description' => $category->description,
+                    'created_at' => $category->created_at,
+                    'updated_at' => $category->updated_at,
+                ]);
+        }
+    }
+
     public function test_factory_users_created_are_in_database()
     {
         $users = factory(\App\User::class, 5)->create();
