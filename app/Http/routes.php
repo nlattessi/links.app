@@ -33,14 +33,15 @@ $app->group([
     'prefix' => '/categories',
     'namespace' => 'App\Http\Controllers',
     'middleware' => 'auth:api',
-], function (\Laravel\Lumen\Application $app) {
+], function (\Laravel\Lumen\Application $app) use ($uuidRegex) {
     $app->get('/', 'CategoriesController@index');
-    $app->get('/{id: [\d]+}', [
-        'as' => 'categories.show', 'uses' => 'CategoriesController@show',
+    $app->get("/{uuid: ${uuidRegex}}", [
+        'as' => 'categories.show',
+        'uses' => 'CategoriesController@show',
     ]);
     $app->post('/', 'CategoriesController@store');
-    $app->put('/{id: [\d]+}', 'CategoriesController@update');
-    $app->delete('/{id: [\d]+}', 'CategoriesController@destroy');
+    $app->put("/{uuid: ${uuidRegex}}", 'CategoriesController@update');
+    $app->delete("/{uuid: ${uuidRegex}}", 'CategoriesController@destroy');
 });
 // /categories --- END
 

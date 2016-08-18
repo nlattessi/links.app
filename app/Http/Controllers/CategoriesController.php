@@ -17,10 +17,10 @@ class CategoriesController extends Controller
         );
     }
 
-    public function show($id)
+    public function show($uuid)
     {
         return $this->item(
-            Category::findOrFail($id),
+            Category::where('uuid', $uuid)->firstOrFail(),
             new CategoryTransformer()
         );
     }
@@ -34,15 +34,15 @@ class CategoriesController extends Controller
         return response()->json(
             $this->item($category, new CategoryTransformer()),
             Response::HTTP_CREATED,
-            ['Location' => route('categories.show', ['id' => $category->id])]
+            ['Location' => route('categories.show', ['uuid' => $category->uuid])]
         );
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $uuid)
     {
         $this->validateCategory($request);
 
-        $category = Category::findOrFail($id);
+        $category = Category::where('uuid', $uuid)->firstOrFail();
 
         $category->fill($request->all());
         $category->save();
@@ -53,9 +53,9 @@ class CategoriesController extends Controller
         );
     }
 
-    public function destroy($id)
+    public function destroy($uuid)
     {
-        Category::findOrFail($id)->delete();
+        Category::where('uuid', $uuid)->firstOrFail()->delete();
 
         return response(null, Response::HTTP_NO_CONTENT);
     }

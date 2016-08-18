@@ -20,7 +20,7 @@ class GetCategoryTest extends TestCase
         $category = $link->category;
 
         $this
-            ->get("/categories/{$category->id}", ['Accept' => 'application/json'])
+            ->get("/categories/{$category->uuid}", ['Accept' => 'application/json'])
             ->seeStatusCode(Response::HTTP_OK);
 
         $body = json_decode($this->response->getContent(), true);
@@ -38,7 +38,7 @@ class GetCategoryTest extends TestCase
     public function show_should_fail_on_an_invalid_category()
     {
         $this
-            ->get('categories/999', ['Accept' => 'application/json'])
+            ->get('categories/25769c6c-d34d-4bfe-ba98-e0ee856f3e7a', ['Accept' => 'application/json'])
             ->seeStatusCode(Response::HTTP_NOT_FOUND);
         
         $this->seeJson([

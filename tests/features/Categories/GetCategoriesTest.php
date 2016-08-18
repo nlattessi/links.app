@@ -52,7 +52,7 @@ class GetCategoriesTest extends TestCase
 
         $this
             ->get(
-                "/categories/{$category->id}?include=links",
+                "/categories/{$category->uuid}?include=links",
                 ['Accept' => 'application/json']
             )
             ->seeStatusCode(Response::HTTP_OK);
@@ -68,7 +68,9 @@ class GetCategoriesTest extends TestCase
         // See category data
         $this->seeJson([
             'id' => $category->id,
+            'uuid'=> $category->uuid,
             'name' => $category->name,
+            'description' => $category->description,
         ]);
 
         // Test included link data (the first record)

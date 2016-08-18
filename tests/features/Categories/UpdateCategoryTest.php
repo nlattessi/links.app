@@ -29,7 +29,7 @@ class UpdateCategoryTest extends TestCase
         ];
 
         $this
-            ->put("/categories/{$category->id}", $requestData, ['Accept' => 'application/json'])
+            ->put("/categories/{$category->uuid}", $requestData, ['Accept' => 'application/json'])
             ->seeStatusCode(Response::HTTP_OK)
             ->seeJson($requestData)
             ->seeInDatabase('categories', ['name' => 'New Category Name',])
@@ -44,7 +44,7 @@ class UpdateCategoryTest extends TestCase
         $category = factory(\App\Category::class)->create();
 
         $this
-            ->put("/categories/{$category->id}", [], ['Accept' => 'application/json'])
+            ->put("/categories/{$category->uuid}", [], ['Accept' => 'application/json'])
             ->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
 
         $data = $this->response->getData(true);
@@ -61,7 +61,7 @@ class UpdateCategoryTest extends TestCase
     public function updating_an_invalid_category_should_return_a_404()
     {
         $this
-            ->put('categories/999', [], ['Accept' => 'application/json'])
+            ->put('categories/25769c6c-d34d-4bfe-ba98-e0ee856f3e7a', [], ['Accept' => 'application/json'])
             ->seeStatusCode(Response::HTTP_NOT_FOUND)
             ->seeJson([
                 'error' => [
@@ -97,7 +97,7 @@ class UpdateCategoryTest extends TestCase
         ];
 
         $this
-            ->put("/categories/{$category->id}", $postData, ['Accept' =>  'application/json'])
+            ->put("/categories/{$category->uuid}", $postData, ['Accept' =>  'application/json'])
             ->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
 
         $data = $this->response->getData(true);
@@ -122,7 +122,7 @@ class UpdateCategoryTest extends TestCase
         ];
 
         $this
-            ->put("/categories/{$category->id}", $postData, ['Accept' =>  'application/json'])
+            ->put("/categories/{$category->uuid}", $postData, ['Accept' =>  'application/json'])
             ->seeStatusCode(Response::HTTP_OK);
 
         $this->seeInDatabase('categories', $postData);

@@ -19,7 +19,7 @@ class DeleteCategoryTest extends TestCase
         $category = factory(\App\Category::class)->create();
 
         $this
-            ->delete("/categories/{$category->id}", [], ['Accept' => 'application/json'])
+            ->delete("/categories/{$category->uuid}", [], ['Accept' => 'application/json'])
             ->seeStatusCode(Response::HTTP_NO_CONTENT)
             ->isEmpty();
             
@@ -32,7 +32,7 @@ class DeleteCategoryTest extends TestCase
     public function deleting_an_invalid_category_should_return_a_404()
     {
         $this
-            ->delete("/categories/999", [], ['Accept' => 'application/json'])
+            ->delete("/categories/25769c6c-d34d-4bfe-ba98-e0ee856f3e7a", [], ['Accept' => 'application/json'])
             ->seeStatusCode(Response::HTTP_NOT_FOUND)
             ->seeJson([
                 'error' => [
