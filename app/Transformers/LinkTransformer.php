@@ -10,8 +10,7 @@ class LinkTransformer extends TransformerAbstract
     public function transform(Link $link)
     {
         return [
-            'id' => $link->id,
-            'uuid' => $link->uuid,
+            'id' => $link->uuid,
             'title' => $link->title,
             'url' => $link->url,
             'description' => $link->description,

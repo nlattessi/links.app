@@ -36,8 +36,7 @@ class UpdateLinkTest extends TestCase
         $this
             ->seeStatusCode(Response::HTTP_OK)
             ->seeJson([
-                'id' => $link->id,
-                'uuid' => $link->uuid,
+                'id' => $link->uuid,
                 'title' => 'Links app',
                 'url' => 'https://links.app',
                 'description' => 'A links storage service',
@@ -101,9 +100,11 @@ class UpdateLinkTest extends TestCase
 
         $this->assertArrayHasKey('title', $body);
         $this->assertArrayHasKey('url', $body);
+        $this->assertArrayHasKey('category_id', $body);
 
         $this->assertEquals(['The title field is required.'], $body['title']);
         $this->assertEquals(['The url field is required.'], $body['url']);
+        $this->assertEquals(['The category id field is required.'], $body['category_id']);
     }
 
     public function test_update_fails_pass_validation_when_title_is_too_long()

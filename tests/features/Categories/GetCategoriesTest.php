@@ -75,8 +75,7 @@ class GetCategoriesTest extends TestCase
 
         // Test included link data (the first record)
         $actual = $data['links']['data'][0];
-        $this->assertEquals($link->id, $actual['id']);
-        $this->assertEquals($link->uuid, $actual['uuid']);
+        $this->assertEquals($link->uuid, $actual['id']);
         $this->assertEquals($link->title, $actual['title']);
         $this->assertEquals($link->url, $actual['url']);
         $this->assertEquals($link->description, $actual['description']);

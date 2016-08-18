@@ -19,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         $stderr = env('APP_STDERR', false);
+
         if ($stderr === true) {
             $app->configureMonologUsing(function($monolog) {
                 $monolog->pushHandler(

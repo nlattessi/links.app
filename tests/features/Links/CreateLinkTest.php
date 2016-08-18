@@ -29,13 +29,13 @@ class CreateLinkTest extends TestCase
 
         $this
             ->seeStatusCode(Response::HTTP_CREATED)
-            ->seeHeaderWithRegExp('Location', '#/links/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$#');
+            ->seeHeaderWithRegExp('Location', '#/links/' . env('UUID_REGEX') . '$#');
         
         $body = json_decode($this->response->getContent(), true);
         $this->assertArrayHasKey('data', $body);
 
         $data = $body['data'];
-        $this->assertTrue($data['id'] > 0, 'Expected a positive integer, but did not see one');
+        $this->assertRegExp('#' . env('UUID_REGEX') . '$#', $data['id'], 'Expected an uuid, but did not see one');
         $this->assertEquals('Links app', $data['title']);
         $this->assertEquals('https://links.app', $data['url']);
         $this->assertEquals('A links storage service', $data['description']);
@@ -107,7 +107,7 @@ class CreateLinkTest extends TestCase
                 'title' => 'Links app',
                 'url' => 'https://links.app',
                 'description' => 'A links storage service',
-                'category_id' => 999,
+                'category_id' => '25769c6c-d34d-4bfe-ba98-e0ee856f3e7a',
             ], ['Accept' => 'application/json']);
 
         $this
