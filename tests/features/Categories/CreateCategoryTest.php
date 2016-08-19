@@ -24,7 +24,6 @@ class CreateCategoryTest extends TestCase
     {
         $postData = [
             'name' => 'PHP',
-            'description' => 'PHP, Laravel, Lumen and related topics',
         ];
 
         $this->post('/categories', $postData, ['Accept' =>  'application/json']);
@@ -83,7 +82,6 @@ class CreateCategoryTest extends TestCase
     {
         $postData = [
             'name' => str_repeat('a', 255),
-            'description' => 'A valid description',
         ];
 
         $this
@@ -98,7 +96,6 @@ class CreateCategoryTest extends TestCase
     {
         $postData = [
             'name' => 'PHP',
-            'description' => 'PHP, Laravel, Lumen and related topics',
         ];
 
         $this

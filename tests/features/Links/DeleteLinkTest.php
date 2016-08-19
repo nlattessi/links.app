@@ -24,7 +24,6 @@ class DeleteLinkTest extends TestCase
                 'title' => $link->title,
                 'url' => $link->url,
                 'category_id' => $link->category->id,
-                'description' => $link->description,
                 'created_at' => $link->created_at,
                 'updated_at' => $link->updated_at,
             ]);

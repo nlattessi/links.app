@@ -17,7 +17,6 @@ class FactoryTest extends TestCase
                     'uuid' => $link->uuid,
                     'title' => $link->title,
                     'url' => $link->url,
-                    'description' => $link->description,
                     'created_at' => $link->created_at,
                     'updated_at' => $link->updated_at,
                 ]);
@@ -35,7 +34,6 @@ class FactoryTest extends TestCase
                     'id' => $category->id,
                     'uuid' => $category->uuid,
                     'name' => $category->name,
-                    'description' => $category->description,
                     'created_at' => $category->created_at,
                     'updated_at' => $category->updated_at,
                 ]);

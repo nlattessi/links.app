@@ -85,7 +85,6 @@ class LinksController extends Controller
         return [
             'title' => $request->input('title'),
             'url' => $request->input('url'),
-            'description' => $request->input('description'),
             'category_id' => Category::where('uuid', $request->input('category_id'))->firstOrFail()->id,
         ];
     }

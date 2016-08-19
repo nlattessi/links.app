@@ -93,7 +93,6 @@ class UpdateCategoryTest extends TestCase
 
         $postData = [
             'name' => $newName,
-            'description' => 'A valid description',
         ];
 
         $this
@@ -118,7 +117,6 @@ class UpdateCategoryTest extends TestCase
 
         $postData = [
             'name' => str_repeat('a', 255),
-            'description' => 'A valid description',
         ];
 
         $this

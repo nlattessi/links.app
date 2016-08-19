@@ -23,7 +23,6 @@ class CreateLinkTest extends TestCase
             ->post('/links', [
                 'title' => 'Links app',
                 'url' => 'https://links.app',
-                'description' => 'A links storage service',
                 'category_id' => $category->uuid,
             ], ['Accept' => 'application/json']);
 
@@ -38,7 +37,6 @@ class CreateLinkTest extends TestCase
         $this->assertRegExp('#' . env('UUID_REGEX') . '$#', $data['id'], 'Expected an uuid, but did not see one');
         $this->assertEquals('Links app', $data['title']);
         $this->assertEquals('https://links.app', $data['url']);
-        $this->assertEquals('A links storage service', $data['description']);
         $this->assertEquals('PHP', $data['category']);
 
         $this->seeInDatabase('links', ['url' => "https://links.app"]);
@@ -70,7 +68,6 @@ class CreateLinkTest extends TestCase
             ->post('/links', [
                 'title' => $link->title,
                 'url' => $link->url,
-                'description' => $link->description,
                 'category_id' => $link->category->id,
             ], ['Accept' => 'application/json']);
 
@@ -91,7 +88,6 @@ class CreateLinkTest extends TestCase
             ->post('/links', [
                 'title' => $link->title,
                 'url' => $link->url,
-                'description' => $link->description,
                 'category_id' => $link->category->uuid,
             ], ['Accept' => 'application/json']);
 
@@ -106,7 +102,6 @@ class CreateLinkTest extends TestCase
             ->post('/links', [
                 'title' => 'Links app',
                 'url' => 'https://links.app',
-                'description' => 'A links storage service',
                 'category_id' => '25769c6c-d34d-4bfe-ba98-e0ee856f3e7a',
             ], ['Accept' => 'application/json']);
 
@@ -124,7 +119,6 @@ class CreateLinkTest extends TestCase
             ->post('/links', [
                 'title' => 'Links app',
                 'url' => 'https://links.app',
-                'description' => 'A links storage service',
                 'category_id' => 'abc',
             ], ['Accept' => 'application/json']);
 
