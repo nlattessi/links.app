@@ -1,6 +1,5 @@
 <?php
 
-use Carbon\Carbon;
 use Illuminate\Http\Response;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 
@@ -11,14 +10,7 @@ class CreateLinkTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        Carbon::setTestNow(Carbon::now('UTC'));
         $this->app->instance('middleware.disable', true);
-    }
-
-    public function tearDown()
-    {
-        parent::tearDown();
-        Carbon::setTestNow();
     }
 
     public function test_create_link()
@@ -32,24 +24,22 @@ class CreateLinkTest extends TestCase
                 'title' => 'Links app',
                 'url' => 'https://links.app',
                 'description' => 'A links storage service',
-                'category_id' => $category->id,
+                'category_id' => $category->uuid,
             ], ['Accept' => 'application/json']);
 
         $this
             ->seeStatusCode(Response::HTTP_CREATED)
-            ->seeHeaderWithRegExp('Location', '#/links/[\d]+$#');
+            ->seeHeaderWithRegExp('Location', '#/links/' . env('UUID_REGEX') . '$#');
         
         $body = json_decode($this->response->getContent(), true);
         $this->assertArrayHasKey('data', $body);
 
         $data = $body['data'];
-        $this->assertTrue($data['id'] > 0, 'Expected a positive integer, but did not see one');
+        $this->assertRegExp('#' . env('UUID_REGEX') . '$#', $data['id'], 'Expected an uuid, but did not see one');
         $this->assertEquals('Links app', $data['title']);
         $this->assertEquals('https://links.app', $data['url']);
         $this->assertEquals('A links storage service', $data['description']);
         $this->assertEquals('PHP', $data['category']);
-        $this->assertEquals(Carbon::now()->toDateTimeString(), $data['created_at']);
-        $this->assertEquals(Carbon::now()->toDateTimeString(), $data['updated_at']);
 
         $this->seeInDatabase('links', ['url' => "https://links.app"]);
     }
@@ -102,7 +92,7 @@ class CreateLinkTest extends TestCase
                 'title' => $link->title,
                 'url' => $link->url,
                 'description' => $link->description,
-                'category_id' => $link->category->id,
+                'category_id' => $link->category->uuid,
             ], ['Accept' => 'application/json']);
 
         $this
@@ -117,13 +107,31 @@ class CreateLinkTest extends TestCase
                 'title' => 'Links app',
                 'url' => 'https://links.app',
                 'description' => 'A links storage service',
-                'category_id' => 999,
+                'category_id' => '25769c6c-d34d-4bfe-ba98-e0ee856f3e7a',
             ], ['Accept' => 'application/json']);
 
         $this
             ->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->seeJson([
                 'category_id' => ['The selected category id is invalid.'],
+            ])
+            ->notSeeInDatabase('links', ['title' => 'Links app']);
+    }
+
+    public function test_create_fails_pass_validation_when_category_id_is_not_uuid()
+    {
+        $this
+            ->post('/links', [
+                'title' => 'Links app',
+                'url' => 'https://links.app',
+                'description' => 'A links storage service',
+                'category_id' => 'abc',
+            ], ['Accept' => 'application/json']);
+
+        $this
+            ->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->seeJson([
+                'category_id' => ['The category id format is invalid.'],
             ])
             ->notSeeInDatabase('links', ['title' => 'Links app']);
     }

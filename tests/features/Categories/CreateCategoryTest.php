@@ -31,7 +31,7 @@ class CreateCategoryTest extends TestCase
         
         $this
             ->seeStatusCode(Response::HTTP_CREATED)
-            ->seeHeaderWithRegExp('Location', '#/categories/[\d]+$#');
+            ->seeHeaderWithRegExp('Location', '#/categories/' . env('UUID_REGEX') . '$#');
 
         $data = $this->response->getData(true);
         $this->assertArrayHasKey('data', $data);

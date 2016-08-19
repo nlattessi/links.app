@@ -29,11 +29,9 @@ class CategoryTransformerTest extends TestCase
         
         $transformedCategory = $this->subject->transform($category);
 
-        $this->assertEquals($category->id, $transformedCategory['id']);
+        $this->assertEquals($category->uuid, $transformedCategory['id']);
         $this->assertEquals($category->name, $transformedCategory['name']);
         $this->assertEquals($category->description, $transformedCategory['description']);
-        $this->assertEquals($category->created_at->toDateTimeString(), $transformedCategory['created_at']);
-        $this->assertEquals($category->updated_at->toDateTimeString(), $transformedCategory['updated_at']);
     }
 
     /** @test **/

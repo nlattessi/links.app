@@ -80,6 +80,26 @@ class HandlerTest extends TestCase
                 'message' => Response::$statusTexts[Response::HTTP_NOT_FOUND],
                 'status' => Response::HTTP_NOT_FOUND,
             ],
+            [
+                'mock' => \Tymon\JWTAuth\Exceptions\TokenExpiredException::class,
+                'message' => 'token_expired',
+                'status' => Response::HTTP_BAD_REQUEST,
+            ],
+            [
+                'mock' => \Tymon\JWTAuth\Exceptions\TokenInvalidException::class,
+                'message' => 'token_invalid',
+                'status' => Response::HTTP_BAD_REQUEST,
+            ],
+            [
+                'mock' => \Tymon\JWTAuth\Exceptions\JWTException::class,
+                'message' => 'token_absent',
+                'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
+            ],
+            [
+                'mock' => \Ramsey\Uuid\Exception\UnsatisfiedDependencyException::class,
+                'message' => '',
+                'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
+            ],
         ];
 
         foreach ($exceptions as $e) {

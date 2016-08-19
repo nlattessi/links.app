@@ -25,7 +25,5 @@ class LinkTransformerTest extends TestCase
         $this->assertArrayHasKey('url', $transformedLink);
         $this->assertArrayHasKey('description', $transformedLink);
         $this->assertArrayHasKey('category', $transformedLink);
-        $this->assertArrayHasKey('created_at', $transformedLink);
-        $this->assertArrayHasKey('updated_at', $transformedLink);
     }
 }

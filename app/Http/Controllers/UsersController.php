@@ -50,8 +50,6 @@ class UsersController extends Controller
 
     public function update(Request $request, $id)
     {
-        $user = User::findOrFail($id);
-
         $this->validate($request, [
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|max:255',
@@ -65,6 +63,8 @@ class UsersController extends Controller
             'password.required' => 'The :attribute field is required.',
             'password.max' => 'The :attribute may not be greater than :max characters.',
         ]);
+
+        $user = User::findOrFail($id);
 
         $request->merge([
             'password' => app('hash')->make($request->password)

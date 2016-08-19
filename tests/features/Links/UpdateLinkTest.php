@@ -1,6 +1,5 @@
 <?php
 
-use Carbon\Carbon;
 use Illuminate\Http\Response;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 
@@ -11,14 +10,7 @@ class UpdateLinkTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        Carbon::setTestNow(Carbon::now('UTC'));
         $this->app->instance('middleware.disable', true);
-    }
-
-    public function tearDown()
-    {
-        parent::tearDown();
-        Carbon::setTestNow();
     }
 
     public function test_update_link()
@@ -32,17 +24,19 @@ class UpdateLinkTest extends TestCase
         ]);
 
         $this
-            ->put("/links/{$link->id}", [
+            ->put("/links/{$link->uuid}", [
                 'id' => 5,
+                'uuid' => '25769c6c-d34d-4bfe-ba98-e0ee856f3e7a',
                 'title' => 'Links app',
                 'url' => 'https://links.app',
                 'description' => 'A links storage service',
+                'category_id' => $link->category->uuid,
             ], ['Accept' => 'application/json']);
 
         $this
             ->seeStatusCode(Response::HTTP_OK)
             ->seeJson([
-                'id' => $link->id,
+                'id' => $link->uuid,
                 'title' => 'Links app',
                 'url' => 'https://links.app',
                 'description' => 'A links storage service',
@@ -52,19 +46,22 @@ class UpdateLinkTest extends TestCase
         $body = json_decode($this->response->getContent(), true);
         $this->assertArrayHasKey('data', $body);
 
-        $data = $body['data'];
-        $this->assertArrayHasKey('created_at', $data);
-        $this->assertEquals(Carbon::now()->toDateTimeString(), $data['created_at']);
-        $this->assertArrayHasKey('updated_at', $data);
-        $this->assertEquals(Carbon::now()->toDateTimeString(), $data['updated_at']);
-
         $this->notSeeInDatabase('links', ['url' => $link->url]);
     }
 
-    public function test_should_fail_if_id_not_exist()
+    public function test_should_fail_if_uuid_not_exist()
     {
+        $category = factory(\App\Category::class)->create();
+
         $this
-            ->put('links/999', [], ['Accept' => 'application/json'])
+            ->put('/links/25769c6c-d34d-4bfe-ba98-e0ee856f3e7a', [
+                'title' => 'Links app',
+                'url' => 'https://links.app',
+                'description' => 'A links storage service',
+                'category_id' => $category->uuid,
+            ], ['Accept' => 'application/json']);
+
+        $this
             ->seeStatusCode(Response::HTTP_NOT_FOUND)
             ->seeJson([
                 'error' => [
@@ -90,7 +87,7 @@ class UpdateLinkTest extends TestCase
     {
         $link = $this->linkFactory();
 
-        $this->put("/links/{$link->id}", [], ['Accept' => 'application/json']);
+        $this->put("/links/{$link->uuid}", [], ['Accept' => 'application/json']);
         
         $this->assertEquals(
             Response::HTTP_UNPROCESSABLE_ENTITY,
@@ -101,9 +98,11 @@ class UpdateLinkTest extends TestCase
 
         $this->assertArrayHasKey('title', $body);
         $this->assertArrayHasKey('url', $body);
+        $this->assertArrayHasKey('category_id', $body);
 
         $this->assertEquals(['The title field is required.'], $body['title']);
         $this->assertEquals(['The url field is required.'], $body['url']);
+        $this->assertEquals(['The category id field is required.'], $body['category_id']);
     }
 
     public function test_update_fails_pass_validation_when_title_is_too_long()
@@ -112,11 +111,11 @@ class UpdateLinkTest extends TestCase
         $link->title = str_repeat('a', 256);
 
         $this
-            ->put("/links/{$link->id}", [
+            ->put("/links/{$link->uuid}", [
                 'title' => $link->title,
                 'url' => $link->url,
                 'description' => $link->description,
-                'category_id' => $link->category->id,
+                'category_id' => $link->category->uuid,
             ], ['Accept' => 'application/json']);
 
         $this
@@ -133,15 +132,35 @@ class UpdateLinkTest extends TestCase
         $link->title = str_repeat('a', 255);
 
         $this
-            ->put("/links/{$link->id}", [
+            ->put("/links/{$link->uuid}", [
                 'title' => $link->title,
                 'url' => $link->url,
                 'description' => $link->description,
-                'category_id' => $link->category->id,
+                'category_id' => $link->category->uuid,
             ], ['Accept' => 'application/json']);
 
         $this
             ->seeStatusCode(Response::HTTP_OK)
             ->seeInDatabase('links', ['title' => $link->title]);
+    }
+
+    public function test_update_fails_pass_validation_when_category_id_is_not_uuid()
+    {
+        $link = $this->linkFactory();
+
+        $this
+            ->put("/links/{$link->uuid}", [
+                'title' => 'Links app',
+                'url' => 'https://links.app',
+                'description' => 'A links storage service',
+                'category_id' => 'abc',
+            ], ['Accept' => 'application/json']);
+
+        $this
+            ->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->seeJson([
+                'category_id' => ['The category id format is invalid.'],
+            ])
+            ->notSeeInDatabase('links', ['title' => 'Links app']);
     }
 }

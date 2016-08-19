@@ -20,6 +20,7 @@ class DeleteLinkTest extends TestCase
         $this
             ->seeInDatabase('links', [
                 'id' => $link->id,
+                'uuid' => $link->uuid,
                 'title' => $link->title,
                 'url' => $link->url,
                 'category_id' => $link->category->id,
@@ -29,17 +30,17 @@ class DeleteLinkTest extends TestCase
             ]);
 
         $this
-            ->delete("/links/{$link->id}", [], ['Accept' => 'application/json'])
+            ->delete("/links/{$link->uuid}", [], ['Accept' => 'application/json'])
             ->seeStatusCode(Response::HTTP_NO_CONTENT)
             ->isEmpty();
 
         $this->notSeeInDatabase('links', ['id' => $link->id]);
     }
 
-    public function test_should_fail_if_id_not_exist()
+    public function test_should_fail_if_uuid_not_exist()
     {
         $this
-            ->delete('links/999', [], ['Accept' => 'application/json'])
+            ->delete('links/25769c6c-d34d-4bfe-ba98-e0ee856f3e7a', [], ['Accept' => 'application/json'])
             ->seeStatusCode(Response::HTTP_NOT_FOUND)
             ->seeJson([
                 'error' => [

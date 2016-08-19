@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AssociateLinksWithCategories extends Migration
+class AddUuidToLinks extends Migration
 {
     /**
      * Run the migrations.
@@ -16,10 +16,9 @@ class AssociateLinksWithCategories extends Migration
 
         Schema::table('links', function (Blueprint $table) use ($dbConnection) {
             if ($dbConnection === 'sqlite') {
-                $table->integer('category_id')->unsigned()->default(0);
+                $table->uuid('uuid')->default('00000000-0000–0000–0000-000000000000');
             } else {
-                // Create the category_id column as an unsigned integer
-                $table->integer('category_id')->after('id')->unsigned();
+                $table->uuid('uuid');
             }
         });
     }
@@ -32,8 +31,7 @@ class AssociateLinksWithCategories extends Migration
     public function down()
     {
         Schema::table('links', function (Blueprint $table) {
-            // Lastly, now it's safe to drop the column
-            $table->dropColumn('category_id');
+            $table->dropColumn('uuid');
         });
     }
 }

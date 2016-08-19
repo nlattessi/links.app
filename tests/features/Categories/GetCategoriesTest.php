@@ -36,11 +36,9 @@ class GetCategoriesTest extends TestCase
 
         foreach ($categories as $category) {
             $this->seeJson([
-                'id' => $category->id,
+                'id' => $category->uuid,
                 'name' => $category->name,
                 'description' => $category->description,
-                'created_at' => $category->created_at->toDateTimeString(),
-                'updated_at' => $category->updated_at->toDateTimeString(),
             ]);
         }
     }
@@ -53,7 +51,7 @@ class GetCategoriesTest extends TestCase
 
         $this
             ->get(
-                "/categories/{$category->id}?include=links",
+                "/categories/{$category->uuid}?include=links",
                 ['Accept' => 'application/json']
             )
             ->seeStatusCode(Response::HTTP_OK);
@@ -66,19 +64,18 @@ class GetCategoriesTest extends TestCase
         $this->assertArrayHasKey('data', $data['links']);
         $this->assertCount(1, $data['links']['data']);
 
-        // See Category Data
+        // See category data
         $this->seeJson([
-            'id' => $category->id,
+            'id' => $category->uuid,
             'name' => $category->name,
+            'description' => $category->description,
         ]);
 
-        // Test included link Data (the first record)
+        // Test included link data (the first record)
         $actual = $data['links']['data'][0];
-        $this->assertEquals($link->id, $actual['id']);
+        $this->assertEquals($link->uuid, $actual['id']);
         $this->assertEquals($link->title, $actual['title']);
         $this->assertEquals($link->url, $actual['url']);
         $this->assertEquals($link->description, $actual['description']);
-        $this->assertEquals($link->created_at->toDateTimeString(), $actual['created_at']);
-        $this->assertEquals($link->updated_at->toDateTimeString(), $actual['updated_at']);
     }
 }

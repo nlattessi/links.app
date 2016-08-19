@@ -14,11 +14,30 @@ class FactoryTest extends TestCase
             $this
                 ->seeInDatabase('links', [
                     'id' => $link->id,
+                    'uuid' => $link->uuid,
                     'title' => $link->title,
                     'url' => $link->url,
                     'description' => $link->description,
                     'created_at' => $link->created_at,
                     'updated_at' => $link->updated_at,
+                ]);
+        }
+    }
+
+    /** @test **/
+    public function test_factory_categories_created_are_in_database()
+    {
+        $categories = factory(\App\Category::class, 5)->create();
+
+        foreach ($categories as $category) {
+            $this
+                ->seeInDatabase('categories', [
+                    'id' => $category->id,
+                    'uuid' => $category->uuid,
+                    'name' => $category->name,
+                    'description' => $category->description,
+                    'created_at' => $category->created_at,
+                    'updated_at' => $category->updated_at,
                 ]);
         }
     }
@@ -33,7 +52,6 @@ class FactoryTest extends TestCase
                     'id' => $user->id,
                     'email' => $user->email,
                     'password' => $user->password,
-                    // 'remember_token' => $user->remember_token,
                     'created_at' => $user->created_at,
                     'updated_at' => $user->updated_at,
                 ]);
