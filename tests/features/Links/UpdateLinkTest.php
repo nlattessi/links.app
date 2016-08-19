@@ -20,7 +20,6 @@ class UpdateLinkTest extends TestCase
         $this->notSeeInDatabase('links', [
             'title' => 'Links app',
             'url' => 'https://links.app',
-            'description' => 'A links storage service',
         ]);
 
         $this
@@ -29,7 +28,6 @@ class UpdateLinkTest extends TestCase
                 'uuid' => '25769c6c-d34d-4bfe-ba98-e0ee856f3e7a',
                 'title' => 'Links app',
                 'url' => 'https://links.app',
-                'description' => 'A links storage service',
                 'category_id' => $link->category->uuid,
             ], ['Accept' => 'application/json']);
 
@@ -39,7 +37,6 @@ class UpdateLinkTest extends TestCase
                 'id' => $link->uuid,
                 'title' => 'Links app',
                 'url' => 'https://links.app',
-                'description' => 'A links storage service',
             ])
             ->seeInDatabase('links', ['url' => 'https://links.app']);
 
@@ -57,7 +54,6 @@ class UpdateLinkTest extends TestCase
             ->put('/links/25769c6c-d34d-4bfe-ba98-e0ee856f3e7a', [
                 'title' => 'Links app',
                 'url' => 'https://links.app',
-                'description' => 'A links storage service',
                 'category_id' => $category->uuid,
             ], ['Accept' => 'application/json']);
 
@@ -114,7 +110,6 @@ class UpdateLinkTest extends TestCase
             ->put("/links/{$link->uuid}", [
                 'title' => $link->title,
                 'url' => $link->url,
-                'description' => $link->description,
                 'category_id' => $link->category->uuid,
             ], ['Accept' => 'application/json']);
 
@@ -135,7 +130,6 @@ class UpdateLinkTest extends TestCase
             ->put("/links/{$link->uuid}", [
                 'title' => $link->title,
                 'url' => $link->url,
-                'description' => $link->description,
                 'category_id' => $link->category->uuid,
             ], ['Accept' => 'application/json']);
 
@@ -152,7 +146,6 @@ class UpdateLinkTest extends TestCase
             ->put("/links/{$link->uuid}", [
                 'title' => 'Links app',
                 'url' => 'https://links.app',
-                'description' => 'A links storage service',
                 'category_id' => 'abc',
             ], ['Accept' => 'application/json']);
 

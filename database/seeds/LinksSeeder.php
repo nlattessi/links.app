@@ -14,7 +14,5 @@ class LinksSeeder extends Seeder
                 $linksCount--;
             }
         });
-
-        // factory(App\Link::class, 20)->create();
     }
 }
