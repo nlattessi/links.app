@@ -16,7 +16,6 @@ class CategoryTransformer extends TransformerAbstract
         return [
             'id' => $category->uuid,
             'name' => $category->name,
-            'description' => $category->description,
         ];
     }
 

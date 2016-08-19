@@ -13,7 +13,6 @@ class LinkTransformer extends TransformerAbstract
             'id' => $link->uuid,
             'title' => $link->title,
             'url' => $link->url,
-            'description' => $link->description,
             'category' => $link->category->name,
         ];
     }
