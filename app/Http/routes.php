@@ -45,6 +45,17 @@ $app->group([
 });
 // /categories --- END
 
+// /auth --- START
+$app->group([
+    'prefix' => '/auth',
+    'namespace' => 'App\Http\Controllers',
+], function () use ($app) {
+    $app->post('/login', 'AuthController@login');
+    $app->post('/register', 'AuthController@register');
+});
+
+// /auth --- END
+
 // /users --- START
 $app->group([
     'prefix' => '/users',
@@ -62,7 +73,7 @@ $app->group([
 // /users --- END
 
 // JWT --- START
-$app->post('/auth/login', 'AuthController@postLogin');
+// $app->post('/auth/login', 'AuthController@postLogin');
 // JWT-TEST
 $app->group([
     'prefix' => '/jwt',

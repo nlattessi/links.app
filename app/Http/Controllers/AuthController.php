@@ -6,7 +6,7 @@ use App\User;
 // use App\Transformers\UserTransformer;
 // use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-// use Illuminate\Http\Response;
+use Illuminate\Http\Response;
 use Tymon\JWTAuth\JWTAuth;
 
 class AuthController extends Controller
@@ -16,6 +16,36 @@ class AuthController extends Controller
     public function __construct(JWTAuth $jwt)
     {
         $this->jwt = $jwt;
+    }
+
+    public function login(Request $request)
+    {
+        // $this->validate($request, [
+        //     'email' => 'required|email|max:255',
+        //     'password' => 'required|max:255'
+        // ]);
+
+        try {
+            if (! $token = $this->jwt->attempt($request->only('email', 'password'))) {
+                $response = [
+                    'message' => 'User not found.',
+                    'status' => Response::HTTP_NOT_FOUND,
+                ];
+
+                return response()->json(['error' => $response], $response['status']);
+            }
+        } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+            return response()->json(
+                ['token error'],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        return response()->json(
+            compact('token'),
+            Response::HTTP_OK
+        );
+        // return response()->json(compact('token'));
     }
 
     public function postLogin(Request $request)
