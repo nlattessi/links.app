@@ -20,10 +20,10 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        // $this->validate($request, [
-        //     'email' => 'required|email|max:255',
-        //     'password' => 'required|max:255'
-        // ]);
+        $this->validate($request, [
+            'email' => 'required|email|exists:users',
+            'password' => 'required'
+        ]);
 
         try {
             if (! $token = $this->jwt->attempt($request->only('email', 'password'))) {
