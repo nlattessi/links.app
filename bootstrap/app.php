@@ -78,7 +78,7 @@ $app->routeMiddleware([
 |
 */
 
-$app->register(App\Providers\AppServiceProvider::class);
+// $app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 
@@ -102,5 +102,16 @@ $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 $app->group(['namespace' => 'App\Http\Controllers'], function ($app) {
     require __DIR__.'/../app/Http/routes.php';
 });
+
+$stderr = env('APP_STDERR', false);
+if ($stderr === true) {
+    $app->configureMonologUsing(function($monolog) {
+        $monolog->pushHandler(
+            new Monolog\Handler\StreamHandler('php://stderr', Monolog\Logger::WARNING)
+        );
+
+        return $monolog;
+    });
+}
 
 return $app;

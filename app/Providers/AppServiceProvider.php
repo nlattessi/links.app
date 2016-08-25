@@ -18,16 +18,6 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        $stderr = env('APP_STDERR', false);
-
-        if ($stderr === true) {
-            $app->configureMonologUsing(function($monolog) {
-                $monolog->pushHandler(
-                    new Monolog\Handler\StreamHandler('php://stderr', Monolog\Logger::WARNING)
-                );
-
-                return $monolog;
-            });
-        }
+        //
     }
 }
