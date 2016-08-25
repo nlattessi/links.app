@@ -38,7 +38,6 @@ class GetCategoriesTest extends TestCase
             $this->seeJson([
                 'id' => $category->uuid,
                 'name' => $category->name,
-                'description' => $category->description,
             ]);
         }
     }
@@ -68,7 +67,6 @@ class GetCategoriesTest extends TestCase
         $this->seeJson([
             'id' => $category->uuid,
             'name' => $category->name,
-            'description' => $category->description,
         ]);
 
         // Test included link data (the first record)
@@ -76,6 +74,5 @@ class GetCategoriesTest extends TestCase
         $this->assertEquals($link->uuid, $actual['id']);
         $this->assertEquals($link->title, $actual['title']);
         $this->assertEquals($link->url, $actual['url']);
-        $this->assertEquals($link->description, $actual['description']);
     }
 }
