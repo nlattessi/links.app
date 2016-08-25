@@ -29,7 +29,6 @@ class GetLinksTest extends TestCase
                 'id' => $link->uuid,
                 'title' => $link->title,
                 'url' => $link->url,
-                'description' => $link->description,
                 'category' => $link->category->name,
             ]);
         }

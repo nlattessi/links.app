@@ -31,7 +31,6 @@ class CategoryTransformerTest extends TestCase
 
         $this->assertEquals($category->uuid, $transformedCategory['id']);
         $this->assertEquals($category->name, $transformedCategory['name']);
-        $this->assertEquals($category->description, $transformedCategory['description']);
     }
 
     /** @test **/

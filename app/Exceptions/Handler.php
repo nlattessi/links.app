@@ -66,16 +66,20 @@ class Handler extends ExceptionHandler
                 $response['status'] = Response::HTTP_NOT_FOUND;
             }
 
-            // if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
-            //     $response['message'] = 'token_expired';
-            //     $response['status'] = $e->getStatusCode();
-            // } else if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
-            //     $response['message'] = 'token_invalid';
-            //     $response['status'] = $e->getStatusCode();
-            // } else if ($e instanceof \Tymon\JWTAuth\Exceptions\JWTException) {
-            //     $response['message'] = 'token_absent';
-            //     $response['status'] = Response::HTTP_INTERNAL_SERVER_ERROR;
-            // }
+            if ($e instanceof \Tymon\JWTAuth\Exceptions\JWTException) {
+                $response['message'] = 'token_exception';
+                $response['status'] = Response::HTTP_INTERNAL_SERVER_ERROR;
+            }
+
+            if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
+                $response['message'] = 'token_expired';
+                $response['status'] = Response::HTTP_UNAUTHORIZED;
+            }
+
+            if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
+                $response['message'] = 'token_invalid';
+                $response['status'] = Response::HTTP_UNAUTHORIZED;
+            }
 
             if ($e instanceof \Ramsey\Uuid\Exception\UnsatisfiedDependencyException) {
                 $response['message'] = $e->getMessage();
