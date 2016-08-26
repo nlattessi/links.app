@@ -11,11 +11,15 @@ $app->get('/', function () use ($app) {
     return $app->version();
 });
 
+$app->get('/key', function () use ($app) {
+    return str_random(32);
+});
+
 $app->group([
     'prefix' => '/links',
     'namespace' => 'App\Http\Controllers',
-    // 'middleware' => 'auth:api',
-    'middleware' => 'jwt.auth',
+    'middleware' => 'auth:api',
+    // 'middleware' => 'jwt.auth',
 ], function () use ($app, $uuidRegex) {
     $app->get('/', 'LinksController@index');
     $app->get("/{uuid: ${uuidRegex}}", [
@@ -30,8 +34,8 @@ $app->group([
 $app->group([
     'prefix' => '/categories',
     'namespace' => 'App\Http\Controllers',
-    // 'middleware' => 'auth:api',
-    'middleware' => 'jwt.auth',
+    'middleware' => 'auth:api',
+    // 'middleware' => 'jwt.auth',
 ], function () use ($app, $uuidRegex) {
     $app->get('/', 'CategoriesController@index');
     $app->get("/{uuid: ${uuidRegex}}", [
