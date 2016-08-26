@@ -23,21 +23,11 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
-        if (! $token = $this->jwt->attempt($request->only('email', 'password'))) {
-            $response = [
-                'message' => 'User not found.',
-                'status' => Response::HTTP_NOT_FOUND,
-            ];
-
-            return response()->json(
-                ['error' => $response],
-                $response['status']
-            );
-        }
+        $response = $this->createResponse($request, Response::HTTP_OK);
 
         return response()->json(
-            compact('token'),
-            Response::HTTP_OK
+            $response['body'],
+            $response['code']
         );
     }
 
@@ -54,18 +44,11 @@ class AuthController extends Controller
             'password' => app('hash')->make($request->input('password')),
         ]);
 
-        if (! $token = $this->jwt->attempt($request->only('email', 'password'))) {
-            $response = [
-                'message' => 'User not found.',
-                'status' => Response::HTTP_NOT_FOUND,
-            ];
-
-            return response()->json(['error' => $response], $response['status']);
-        }
+        $response = $this->createResponse($request, Response::HTTP_CREATED);
 
         return response()->json(
-            compact('token'),
-            Response::HTTP_CREATED
+            $response['body'],
+            $response['code']
         );
     }
 
@@ -83,5 +66,25 @@ class AuthController extends Controller
             compact('user'),
             Response::HTTP_OK
         );
+    }
+
+    private function createResponse(Request $request, $statusCode)
+    {
+        if (! $token = $this->jwt->attempt($request->only('email', 'password'))) {
+            return [
+                'body' => [
+                    'error' => [
+                        'message' => 'User not found.',
+                        'status' => Response::HTTP_NOT_FOUND,
+                    ],
+                ],
+                'code' => Response::HTTP_NOT_FOUND
+            ];
+        }
+
+        return [
+            'body' => compact('token'),
+            'code' => $statusCode,
+        ];
     }
 }
