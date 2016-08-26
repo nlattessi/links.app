@@ -1,6 +1,18 @@
 language: php
+
 php:
-- 7.0
+  - 7.0
+
+env:
+  global:
+    - APP_ENV=local
+    - APP_DEBUG=true
+    - APP_KEY=SomeRandomKey!!!
+    - DB_CONNECTION=sqlite
+    - CACHE_DRIVER=file
+    - QUEUE_DRIVER=sync
+    - JWT_SECRET=LtufBHvu2Gzos3uIuVieh7lKvnNJUetD
+    - UUID_REGEX=[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}
 
 install: travis_retry composer install --no-interaction --prefer-source
 
