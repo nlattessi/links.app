@@ -1,30 +1,24 @@
 language: php
-
 php:
-  - 7.0
-
+- 7.0
 env:
   global:
-    - APP_ENV=local
-    - APP_DEBUG=false
-    - APP_KEY=SomeRandomKey!!!
-    - DB_CONNECTION=sqlite
-    - CACHE_DRIVER=file
-    - QUEUE_DRIVER=sync
-    - JWT_SECRET=LtufBHvu2Gzos3uIuVieh7lKvnNJUetD
-    - UUID_REGEX=[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}
-
+  - APP_ENV=local
+  - APP_DEBUG=false
+  - APP_KEY=SomeRandomKey!!!
+  - DB_CONNECTION=sqlite
+  - CACHE_DRIVER=file
+  - QUEUE_DRIVER=sync
+  - JWT_SECRET=LtufBHvu2Gzos3uIuVieh7lKvnNJUetD
+  - UUID_REGEX=[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}
 install: travis_retry composer install --no-interaction --prefer-source
-
 script: vendor/bin/phpunit
-
 deploy:
   provider: heroku
   api_key:
-    secure: v1e/9iURleEj7i7GiIb7z3fSzg76A6cL+hskZmdVAoWhLgSLdIrkCx1wLJxExB/yPqsz1gaWoUOGOdXfMoKbJxQjVWyk/6EPebIatYeOHtLiQXqxSXGGJCYGkRB/cUq4W4ZCJkRfzv2D/BZch0aaebXe03DNtEI/ixk70eWA2Mi0GDpWLTs31pVzsZP9L5axlCIRroI/fumC6Mi2Q92pkC5V2IrH1q+5lpZ4N0b51re8MsrWYnWOpWGExURGhCHIRng0WuaCWlOBdQfzZ2K6v+vkeU+mGkvxKFqOXoEyHtiCU8aFKYKwvW7WdnbZfwFaa16MXQ3RXzHSupRpzlF36ZpEbeYKKYfwHzc5/7uBZ4fKZOi9+eSDHnP/j5Uo7OCphsRdLbkw2mQsN+YbKGhTxNNhkIeNeV/xIv7aKB4XHCHk8+Uxo6kyi0sVHUiKDRYaylyNyAPkgl/FJRQx6654Ud/h2bmcbzc17OspB1ixJl1mNhkjMeqqk29yA9D+0lC5gxMiTFz2/ibKhVWSge+MukUPcsBjw/Zs15Z+ouxsyTTIsOC93ly1L4X3+0HnDgRQ6/E1/bU/8a8xwCDtp14Hl5e/llurqYJLCD/P6sgr8FctDZ0Fp1LAOER/jzvBiPFnxAgpP9VoBQ8/nvGuBF+CY3wNznpfFrnr1aej3wndtE8=
+    secure: qZZfsvzONbphs7x1QQjnJrTCd6t6chmUwmumh/MoKsrPgcL6HNIt1lgtPt/OjnKPSJUksZIT8CH2AKsCBpKVm/doPL7IaLu4MTsAi2nt8/yqVFH5sr/RvETNjlDbwG+tbydlscHbeEGeW+pXskOUkqz1sMV5fr1TAz9Ib9WtDdM2ggE8M7kUXkW/m1LSoC+TmvLM7EuK9REnTBMnW8pord0vpX5ClcusYcgAQB5yjvn0OtoaaS4D9iZXRzTrRaCZ3SvL9PR/NS/Ht86z4sy1pnQ1XAWxeFE2IiIqvcyCYXVz7sj9wfI1pvRGQyEU8GQnFDiQz5IeJUnKGairLRnCSjF0IpiNh02ZMJ25z51r0gSsna5m3HdRYC1oEK7Jb94S+jbrmE+ezk07G3Bvlk+HSywM1mudvgH62GZT83KSfUy2s24G9GCgnvKi2DjIIZTKLXEgaFiOXnlog0sVaO518DP3DvYho2KOUcGH3tmRnB//9xbLIwV0nCOQKF0BkH+RBdh78w5iss4QjJ9QHyXulxuzLRF5+kAU3Y35xQG0chyb8GzaD4s1HPhQzk673P/PU/9wdiOd9PRs5i0QR28HPuoC7QZaNBDhKtkHut9xgJJA596hZiPHMG9HCM99lMuDmY0LRZEKo5OKTZklIst4vuf1e+fvJy6FUeS5j5V6bSg=
   app: dry-shore-86449
-  run: "php artisan migrate --force"
-
+  run: php artisan migrate --force
 branches:
   only:
-    - master
+  - master
