@@ -6,7 +6,7 @@ php:
 env:
   global:
     - APP_ENV=local
-    - APP_DEBUG=true
+    - APP_DEBUG=false
     - APP_KEY=SomeRandomKey!!!
     - DB_CONNECTION=sqlite
     - CACHE_DRIVER=file
