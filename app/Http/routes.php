@@ -54,3 +54,19 @@ $app->group([
     $app->post('/login', 'AuthController@login');
     $app->post('/register', 'AuthController@register');
 });
+
+$app->group([
+    'prefix' => '/user',
+    'namespace' => 'App\Http\Controllers',
+    'middleware' => 'auth:api',
+    // 'middleware' => 'jwt.auth',
+], function () use ($app, $uuidRegex) {
+    $app->get("/{uuid: ${uuidRegex}}/categories", 'UserCategoriesController@index');
+    $app->get("/{uid: ${uuidRegex}}/categories/{cid: ${uuidRegex}}", [
+        'as' => 'userCategories.show',
+        'uses' => 'UserCategoriesController@show',
+    ]);
+    // $app->post('/', 'CategoriesController@store');
+    // $app->put("/{uuid: ${uuidRegex}}", 'CategoriesController@update');
+    // $app->delete("/{uuid: ${uuidRegex}}", 'CategoriesController@destroy');
+});

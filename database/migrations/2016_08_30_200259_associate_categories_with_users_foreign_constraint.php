@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AssociateLinksWithCategoriesForeignConstraint extends Migration
+class AssociateCategoriesWithUsersForeignConstraint extends Migration
 {
     /**
      * Run the migrations.
@@ -12,11 +12,11 @@ class AssociateLinksWithCategoriesForeignConstraint extends Migration
      */
     public function up()
     {
-        Schema::table('links', function (Blueprint $table) {
+        Schema::table('categories', function (Blueprint $table) {
             $table
-                ->foreign('category_id')
+                ->foreign('user_id')
                 ->references('id')
-                ->on('categories')
+                ->on('users')
                 ->onDelete('cascade');
         });
     }
@@ -28,8 +28,8 @@ class AssociateLinksWithCategoriesForeignConstraint extends Migration
      */
     public function down()
     {
-        Schema::table('links', function (Blueprint $table) {
-            $table->dropForeign('links_category_id_foreign');
+        Schema::table('categories', function (Blueprint $table) {
+            $table->dropForeign('categories_user_id_foreign');
         });
     }
 }

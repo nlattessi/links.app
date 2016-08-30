@@ -1,12 +1,5 @@
 <?php
 
-// $factory->define(App\User::class, function ($faker) {
-//     return [
-//         'name' => $faker->name,
-//         'email' => $faker->email,
-//     ];
-// });
-
 $factory->define(App\User::class, function (Faker\Generator $faker) {
     return [
         'email' => $faker->safeEmail,

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AssociateLinksWithCategories extends Migration
+class AssociateCategoriesWithUsers extends Migration
 {
     /**
      * Run the migrations.
@@ -14,11 +14,11 @@ class AssociateLinksWithCategories extends Migration
     {
         $dbConnection = env('DB_CONNECTION', 'mysql');
 
-        Schema::table('links', function (Blueprint $table) use ($dbConnection) {
+        Schema::table('categories', function (Blueprint $table) use ($dbConnection) {
             if ($dbConnection === 'sqlite') {
-                $table->integer('category_id')->unsigned()->default(0);
+                $table->integer('user_id')->unsigned()->default(0);
             } else {
-                $table->integer('category_id')->after('id')->unsigned();
+                $table->integer('user_id')->after('id')->unsigned();
             }
         });
     }
@@ -30,8 +30,8 @@ class AssociateLinksWithCategories extends Migration
      */
     public function down()
     {
-        Schema::table('links', function (Blueprint $table) {
-            $table->dropColumn('category_id');
+        Schema::table('categories', function (Blueprint $table) {
+            $table->dropColumn('user_id');
         });
     }
 }

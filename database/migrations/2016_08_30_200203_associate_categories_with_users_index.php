@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AssociateLinksWithCategoriesIndex extends Migration
+class AssociateCategoriesWithUsersIndex extends Migration
 {
     /**
      * Run the migrations.
@@ -12,8 +12,8 @@ class AssociateLinksWithCategoriesIndex extends Migration
      */
     public function up()
     {
-        Schema::table('links', function (Blueprint $table) {
-            $table->index('category_id');
+        Schema::table('categories', function (Blueprint $table) {
+            $table->index('user_id');
         });
     }
 
@@ -24,8 +24,8 @@ class AssociateLinksWithCategoriesIndex extends Migration
      */
     public function down()
     {
-        Schema::table('links', function (Blueprint $table) {
-            $table->dropIndex('links_category_id_index');
+        Schema::table('categories', function (Blueprint $table) {
+            $table->dropIndex('categories_user_id_index');
         });
     }
 }
