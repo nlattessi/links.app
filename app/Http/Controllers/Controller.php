@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Response\FractalResponse;
 use Laravel\Lumen\Routing\Controller as BaseController;
 use League\Fractal\TransformerAbstract;
+use Illuminate\Http\Response;
 
 class Controller extends BaseController
 {

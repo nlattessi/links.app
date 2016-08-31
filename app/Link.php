@@ -9,7 +9,7 @@ class Link extends Model
 {
     use Uuids;
 
-    protected $fillable = ['title', 'url', 'description', 'category_id'];
+    protected $fillable = ['title', 'url'];
 
     public function category()
     {

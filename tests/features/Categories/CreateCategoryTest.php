@@ -61,7 +61,6 @@ class CreateCategoryTest extends TestCase
     {
         $postData = [
             'name' => str_repeat('a', 256),
-            'description' => 'A valid description',
         ];
 
         $this

@@ -51,7 +51,7 @@ class DeleteCategoryTest extends TestCase
             ->assertNotRegExp(
                 '/Category not found/',
                 $this->response->getContent(),
-                'CategoriesController@update route matching when it should not.'
+                'CategoriesController@delete route matching when it should not.'
             );
     }
 }

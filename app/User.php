@@ -21,7 +21,7 @@ class User extends Model implements
 
     protected $fillable = ['email', 'password'];
 
-    protected $hidden = ['password'];
+    protected $hidden = ['id', 'password', 'uuid', 'created_at', 'updated_at'];
 
     public function getJWTIdentifier()
     {

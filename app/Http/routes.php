@@ -56,17 +56,41 @@ $app->group([
 });
 
 $app->group([
-    'prefix' => '/user',
+    'prefix' => '/user/links',
     'namespace' => 'App\Http\Controllers',
-    'middleware' => 'auth:api',
-    // 'middleware' => 'jwt.auth',
+    'middleware' => [
+        'testjwt',
+        'auth:api',
+    ],
 ], function () use ($app, $uuidRegex) {
-    $app->get("/{uuid: ${uuidRegex}}/categories", 'UserCategoriesController@index');
-    $app->get("/{uid: ${uuidRegex}}/categories/{cid: ${uuidRegex}}", [
+    $app->get('/', 'UserLinksController@index');
+
+    $app->get("/{uuid: ${uuidRegex}}", [
+        'as' => 'UserLinks.show',
+        'uses' => 'UserLinksController@show',
+    ]);
+
+    $app->post('/', 'UserLinksController@store');
+    // $app->patch("/{uuid: ${uuidRegex}}", 'UserCategoriesController@update');
+    // $app->delete("/{uuid: ${uuidRegex}}", 'UserCategoriesController@destroy');
+});
+
+$app->group([
+    'prefix' => '/user/categories',
+    'namespace' => 'App\Http\Controllers',
+    'middleware' => [
+        'testjwt',
+        'auth:api',
+    ],
+], function () use ($app, $uuidRegex) {
+    $app->get('/', 'UserCategoriesController@index');
+
+    $app->get("/{uuid: ${uuidRegex}}", [
         'as' => 'userCategories.show',
         'uses' => 'UserCategoriesController@show',
     ]);
-    // $app->post('/', 'CategoriesController@store');
-    // $app->put("/{uuid: ${uuidRegex}}", 'CategoriesController@update');
-    // $app->delete("/{uuid: ${uuidRegex}}", 'CategoriesController@destroy');
+
+    $app->post('/', 'UserCategoriesController@store');
+    $app->patch("/{uuid: ${uuidRegex}}", 'UserCategoriesController@update');
+    $app->delete("/{uuid: ${uuidRegex}}", 'UserCategoriesController@destroy');
 });

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use App\Category;
 use App\User;
 use App\Transformers\CategoryTransformer;
@@ -10,71 +11,90 @@ use Illuminate\Http\Response;
 
 class UserCategoriesController extends Controller
 {
-    public function index($uuid)
+    public function index()
     {
-        $user = User::where('uuid', $uuid)->firstOrFail();
-
-        // TODO: CHECK USER FOR TOKEN AND SEE IF MATCH
+        $user = Auth::user();
 
         return $this->collection(
-            $user->categories()->get(),
+            $user->categories,
             new CategoryTransformer()
         );
     }
 
-    public function show($uid, $cid)
+    public function show($uuid)
     {
-        $user = User::where('uuid', $uid)->firstOrFail();
-
-        // TODO: CHECK USER FOR TOKEN AND SEE IF MATCH
-
-        $category = $user->categories()->where('uuid', $cid)->firstOrFail();
+        $user = Auth::user();
 
         return $this->item(
-            $category,
+            $user->categories()->where('uuid', $uuid)->firstOrFail(),
             new CategoryTransformer()
         );
     }
 
-    // public function store(Request $request)
-    // {
-    //     $this->validateCategory($request);
+    public function store(Request $request)
+    {
+        $user = Auth::user();
 
-    //     $category = Category::create($request->all());
+        $this->validateCategory($request);
 
-    //     return response()->json(
-    //         $this->item($category, new CategoryTransformer()),
-    //         Response::HTTP_CREATED,
-    //         ['Location' => route('categories.show', ['uuid' => $category->uuid])]
-    //     );
-    // }
+        $category = Category::create(
+            $this->getCategoryData($request, $user)
+        );
 
-    // public function update(Request $request, $uuid)
-    // {
-    //     $this->validateCategory($request);
+        return response()->json(
+            $this->item($category, new CategoryTransformer()),
+            Response::HTTP_CREATED,
+            ['Location' => route('userCategories.show', ['uuid' => $category->uuid])]
+        );
+    }
 
-    //     $category = Category::where('uuid', $uuid)->firstOrFail();
+    public function update(Request $request, $uuid)
+    {
+        $user = Auth::user();
 
-    //     $category->fill($request->all());
-    //     $category->save();
+        $this->validateUpdateCategory($request);
 
-    //     return response()->json(
-    //         $this->item($category, new CategoryTransformer()),
-    //         Response::HTTP_OK
-    //     );
-    // }
+        $category = $user->categories()->where('uuid', $uuid)->firstOrFail();
 
-    // public function destroy($uuid)
-    // {
-    //     Category::where('uuid', $uuid)->firstOrFail()->delete();
+        $category->fill(
+            $request->all()
+        );
+        $category->save();
 
-    //     return response(null, Response::HTTP_NO_CONTENT);
-    // }
+        return response()->json(
+            $this->item($category, new CategoryTransformer()),
+            Response::HTTP_OK
+        );
+    }
 
-    // private function validateCategory(Request $request)
-    // {
-    //     $this->validate($request, [
-    //         'name' => 'required|max:255',
-    //     ]);
-    // }
+    public function destroy($uuid)
+    {
+        $user = Auth::user();
+
+        $user->categories()->where('uuid', $uuid)->firstOrFail()->delete();
+
+        return response(null, Response::HTTP_NO_CONTENT);
+    }
+
+    private  function getCategoryData(Request $request, User $user)
+    {
+        return [
+            'name' => $request->input('name'),
+            'user_id' => $user->id,
+        ];
+    }
+
+    private function validateCategory(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'required|max:255',
+        ]);
+    }
+
+    private function validateUpdateCategory(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'max:255',
+        ]);
+    }
 }
