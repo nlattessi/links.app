@@ -59,9 +59,10 @@ $app->singleton(
 |
 */
 
-// $app->middleware([
-//    App\Http\Middleware\ExampleMiddleware::class
-// ]);
+$app->middleware([
+    // App\Http\Middleware\ExampleMiddleware::class
+    App\Http\Middleware\CorsMiddleware::class,
+]);
 
 $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
@@ -88,6 +89,9 @@ $app->register(App\Providers\FractalServiceProvider::class);
 
 // JWT
 $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
+
+// CORS
+$app->register(App\Providers\CatchAllOptionsRequestsProvider::class);
 
 /*
 |--------------------------------------------------------------------------
