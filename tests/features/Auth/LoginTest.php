@@ -20,9 +20,13 @@ class LoginTest extends TestCase
             'password' => 'password',
         ];
 
-        $this
-            ->post('/auth/login', $loginData, ['Accept' => 'application/json'])
-            ->seeStatusCode(Response::HTTP_OK);
+        $this->post(
+            '/auth/login',
+            $loginData,
+            ['Accept' => 'application/json']
+        );
+
+        $this->seeStatusCode(Response::HTTP_OK);
 
         $data = $this->response->getData(true);
         $this->assertArrayHasKey('token', $data);
@@ -37,9 +41,13 @@ class LoginTest extends TestCase
             'password' => 'password',
         ];
 
-        $this
-            ->post('/auth/login', $loginData, ['Accept' => 'application/json'])
-            ->seeStatusCode(Response::HTTP_NOT_FOUND);
+        $this->post(
+            '/auth/login',
+            $loginData,
+            ['Accept' => 'application/json']
+        );
+
+        $this->seeStatusCode(Response::HTTP_NOT_FOUND);
 
         $this->seeJson([
             'error' => [
@@ -51,9 +59,13 @@ class LoginTest extends TestCase
 
     public function test_a_user_cant_login_without_required_fields()
     {
-        $this
-            ->post('/auth/login', [], ['Accept' => 'application/json'])
-            ->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->post(
+            '/auth/login',
+            [],
+            ['Accept' => 'application/json']
+        );
+
+        $this->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
 
         $data = $this->response->getData(true);
 
@@ -72,9 +84,13 @@ class LoginTest extends TestCase
             'password' => 'password',
         ];
 
-        $this
-            ->post('/auth/login', $loginData, ['Accept' => 'application/json'])
-            ->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->post(
+            '/auth/login',
+            $loginData,
+            ['Accept' => 'application/json']
+        );
+
+        $this->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
 
         $data = $this->response->getData(true);
 

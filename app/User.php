@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Traits\Uuids;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
@@ -16,10 +17,11 @@ class User extends Model implements
 {
     use Authenticatable;
     use Authorizable;
+    use Uuids;
 
     protected $fillable = ['email', 'password'];
 
-    protected $hidden = ['password'];
+    protected $hidden = ['id', 'password', 'uuid', 'created_at', 'updated_at'];
 
     public function getJWTIdentifier()
     {
@@ -29,5 +31,10 @@ class User extends Model implements
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
     }
 }

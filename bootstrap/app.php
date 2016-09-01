@@ -66,6 +66,7 @@ $app->middleware([
 
 $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
+    'testjwt' => App\Http\Middleware\JWTSetRequestInTest::class,
 ]);
 
 /*

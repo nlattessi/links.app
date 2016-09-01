@@ -30,8 +30,10 @@ class LinksController extends Controller
     {
         $this->validateLink($request);
 
-        $link = Link::create(
-            $this->getLinkData($request)
+        $category = Category::where('uuid', $request->input('category_id'))->firstOrFail();
+
+        $link = $category->links()->create(
+            $request->only(['title', 'url'])
         );
 
         return response()->json(
@@ -43,12 +45,12 @@ class LinksController extends Controller
 
     public function update(Request $request, $uuid)
     {
-        $this->validateLink($request);
+        $this->validateUpdateLink($request);
 
         $link = Link::where('uuid', $uuid)->firstOrFail();
 
         $link->fill(
-            $this->getLinkData($request)
+            $request->all()
         );
         $link->save();
 
@@ -71,21 +73,15 @@ class LinksController extends Controller
             'title' => 'required|max:255',
             'url' => 'required|max:255',
             'category_id' => 'required|regex:/^' . env('UUID_REGEX') . '$/|exists:categories,uuid'
-        ], [
-            'title.required' => 'The :attribute field is required.',
-            'title.max' => 'The :attribute may not be greater than :max characters.',
-            
-            'url.required' => 'The :attribute field is required.',
-            'url.max' => 'The :attribute may not be greater than :max characters.',
         ]);
     }
 
-    private  function getLinkData(Request $request)
+    private function validateUpdateLink(Request $request)
     {
-        return [
-            'title' => $request->input('title'),
-            'url' => $request->input('url'),
-            'category_id' => Category::where('uuid', $request->input('category_id'))->firstOrFail()->id,
-        ];
+        $this->validate($request, [
+            'title' => 'max:255',
+            'url' => 'max:255',
+            'category_id' => 'regex:/^' . env('UUID_REGEX') . '$/|exists:categories,uuid'
+        ]);
     }
 }

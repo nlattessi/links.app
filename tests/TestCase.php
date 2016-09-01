@@ -52,4 +52,25 @@ class TestCase extends Laravel\Lumen\Testing\TestCase
 
         return $links;
     }
+
+    public function userFactory($categoriesCount = 1, $linksCount = 5)
+    {
+        $user = factory(\App\User::class)->create();
+
+        if ($categoriesCount === 1) {
+            $userLinks = $this->linkFactory($linksCount);
+            foreach ($userLinks as $userLink) {
+                $userLink->category->user()->associate($user)->save();
+            }
+        } else {
+            for ($i = 0; $i < $categoriesCount; $i++) {
+                $userLinks = $this->linkFactory($linksCount);
+                foreach ($userLinks as $userLink) {
+                    $userLink->category->user()->associate($user)->save();
+                }
+            }
+        }
+
+        return $user;
+    }
 }

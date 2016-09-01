@@ -15,7 +15,8 @@ $app->get('/key', function () use ($app) {
     return str_random(32);
 });
 
-$app->group([
+// DEPRECATED
+/*$app->group([
     'prefix' => '/links',
     'namespace' => 'App\Http\Controllers',
     'middleware' => 'auth:api',
@@ -29,9 +30,10 @@ $app->group([
     $app->post('/', 'LinksController@store');
     $app->put("/{uuid: ${uuidRegex}}", 'LinksController@update');
     $app->delete("/{uuid: ${uuidRegex}}", 'LinksController@destroy');
-});
+});*/
 
-$app->group([
+// DEPRECATED
+/*$app->group([
     'prefix' => '/categories',
     'namespace' => 'App\Http\Controllers',
     'middleware' => 'auth:api',
@@ -45,7 +47,7 @@ $app->group([
     $app->post('/', 'CategoriesController@store');
     $app->put("/{uuid: ${uuidRegex}}", 'CategoriesController@update');
     $app->delete("/{uuid: ${uuidRegex}}", 'CategoriesController@destroy');
-});
+});*/
 
 $app->group([
     'prefix' => '/auth',
@@ -53,4 +55,44 @@ $app->group([
 ], function () use ($app) {
     $app->post('/login', 'AuthController@login');
     $app->post('/register', 'AuthController@register');
+});
+
+$app->group([
+    'prefix' => '/user/links',
+    'namespace' => 'App\Http\Controllers',
+    'middleware' => [
+        'testjwt',
+        'auth:api',
+    ],
+], function () use ($app, $uuidRegex) {
+    $app->get('/', 'UserLinksController@index');
+
+    $app->get("/{uuid: ${uuidRegex}}", [
+        'as' => 'UserLinks.show',
+        'uses' => 'UserLinksController@show',
+    ]);
+
+    $app->post('/', 'UserLinksController@store');
+    $app->patch("/{uuid: ${uuidRegex}}", 'UserLinksController@update');
+    $app->delete("/{uuid: ${uuidRegex}}", 'UserLinksController@destroy');
+});
+
+$app->group([
+    'prefix' => '/user/categories',
+    'namespace' => 'App\Http\Controllers',
+    'middleware' => [
+        'testjwt',
+        'auth:api',
+    ],
+], function () use ($app, $uuidRegex) {
+    $app->get('/', 'UserCategoriesController@index');
+
+    $app->get("/{uuid: ${uuidRegex}}", [
+        'as' => 'userCategories.show',
+        'uses' => 'UserCategoriesController@show',
+    ]);
+
+    $app->post('/', 'UserCategoriesController@store');
+    $app->patch("/{uuid: ${uuidRegex}}", 'UserCategoriesController@update');
+    $app->delete("/{uuid: ${uuidRegex}}", 'UserCategoriesController@destroy');
 });
