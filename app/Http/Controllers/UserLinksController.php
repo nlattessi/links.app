@@ -7,6 +7,7 @@ use App\Link;
 use App\Category;
 use App\User;
 use App\Transformers\LinkTransformer;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -16,9 +17,7 @@ class UserLinksController extends Controller
     {
         $user = Auth::user();
 
-        $links = $user->categories->flatMap(function ($category) {
-            return $category->links;
-        });
+        $links = $this->getLinksFromUser($user);
 
         return $this->collection(
             $links,
@@ -30,12 +29,10 @@ class UserLinksController extends Controller
     {
         $user = Auth::user();
 
-        $ids = $user->categories->map(function ($category) {
-            return $category->id;
-        })->all();
+        $link = $this->getLinkFromUserFilterByUuid($user, $uuid);
 
         return $this->item(
-            Link::where('uuid', $uuid)->whereIn('category_id', $ids)->firstOrFail(),
+            $link,
             new LinkTransformer()
         );
     }
@@ -46,9 +43,10 @@ class UserLinksController extends Controller
 
         $this->validateLink($request);
 
-        $category = Category::where('uuid', $request->input('category'))
-            ->where('user_id', $user->id)
-            ->firstOrFail();
+        $category = $this->getCategoryFromUserFilterByUuid(
+            $user,
+            $request->input('category')
+        );
 
         $link = $category->links()->create(
             $this->getLinkData($request, $user)
@@ -61,35 +59,78 @@ class UserLinksController extends Controller
         );
     }
 
-    // public function update(Request $request, $uuid)
-    // {
-    //     $user = Auth::user();
+    public function update(Request $request, $uuid)
+    {
+        $user = Auth::user();
 
-    //     $this->validateUpdateCategory($request);
+        $this->validateUpdateLink($request);
 
-    //     $category = $user->categories()->where('uuid', $uuid)->firstOrFail();
+        $link = $this->getLinkFromUserFilterByUuid($user, $uuid);
 
-    //     $category->fill(
-    //         $request->all()
-    //     );
-    //     $category->save();
+        $link->fill(
+            $request->except(['category'])
+        );
 
-    //     return response()->json(
-    //         $this->item($category, new LinkTransformer()),
-    //         Response::HTTP_OK
-    //     );
-    // }
+        if ($request->input('category')) {
+            $category = $this->getCategoryFromUserFilterByUuid(
+                $user,
+                $request->input('category')
+            );
 
-    // public function destroy($uuid)
-    // {
-    //     $user = Auth::user();
+            $link->category()->associate($category);
+        }
 
-    //     $user->categories()->where('uuid', $uuid)->firstOrFail()->delete();
+        $link->save();
 
-    //     return response(null, Response::HTTP_NO_CONTENT);
-    // }
+        return response()->json(
+            $this->item($link, new LinkTransformer()),
+            Response::HTTP_OK
+        );
+    }
 
-    private  function getLinkData(Request $request, User $user)
+    public function destroy($uuid)
+    {
+        $user = Auth::user();
+
+        $link = $this->getLinkFromUserFilterByUuid($user, $uuid);
+
+        $link->delete();
+
+        return response(null, Response::HTTP_NO_CONTENT);
+    }
+
+    private function getLinksFromUser(User $user)
+    {
+        return $user->categories->flatMap(function ($category) {
+            return $category->links;
+        });
+    }
+
+    private function getLinkFromUserFilterByUuid(User $user, $uuid)
+    {
+        $links = $this->getLinksFromUser($user);
+
+        $link = $links->where('uuid', $uuid)->first();
+
+        if (! $link) {
+            throw new ModelNotFoundException();
+        }
+
+        return $link;
+    }
+
+    private function getCategoryFromUserFilterByUuid(User $user, $uuid)
+    {
+        $category = $user->categories->where('uuid', $uuid)->first();
+
+        if (! $category) {
+            throw new ModelNotFoundException();
+        }
+
+        return $category;
+    }
+
+    private function getLinkData(Request $request, User $user)
     {
         return [
             'title' => $request->input('title'),
@@ -106,10 +147,12 @@ class UserLinksController extends Controller
         ]);
     }
 
-    // private function validateUpdateCategory(Request $request)
-    // {
-    //     $this->validate($request, [
-    //         'name' => 'max:255',
-    //     ]);
-    // }
+    private function validateUpdateLink(Request $request)
+    {
+        $this->validate($request, [
+            'title' => 'max:255',
+            'url' => 'max:255',
+            'category' => 'regex:/^' . env('UUID_REGEX') . '$/|exists:categories,uuid',
+        ]);
+    }
 }

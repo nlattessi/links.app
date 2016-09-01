@@ -15,9 +15,13 @@ class RegisterTest extends TestCase
             'password_confirmation' => 'password',
         ];
 
-        $this
-            ->post('/auth/register', $registerData, ['Accept' => 'application/json'])
-            ->seeStatusCode(Response::HTTP_CREATED);
+        $this->post(
+            '/auth/register',
+            $registerData,
+            ['Accept' => 'application/json']
+        );
+
+        $this->seeStatusCode(Response::HTTP_CREATED);
 
         $data = $this->response->getData(true);
         $this->assertArrayHasKey('token', $data);
@@ -27,9 +31,13 @@ class RegisterTest extends TestCase
 
     public function test_a_user_cant_register_without_required_fields()
     {
-        $this
-            ->post('/auth/register', [], ['Accept' => 'application/json'])
-            ->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->post(
+            '/auth/register',
+            [],
+            ['Accept' => 'application/json']
+        );
+
+        $this->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
 
         $data = $this->response->getData(true);
 
@@ -49,9 +57,13 @@ class RegisterTest extends TestCase
             'password_confirmation' => 'password2',
         ];
 
-        $this
-            ->post('/auth/register', $registerData, ['Accept' => 'application/json'])
-            ->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->post(
+            '/auth/register',
+            $registerData,
+            ['Accept' => 'application/json']
+        );
+
+        $this->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
 
         $data = $this->response->getData(true);
         $this->assertArrayHasKey('password', $data);

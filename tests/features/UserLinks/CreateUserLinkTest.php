@@ -26,7 +26,7 @@ class CreateUserLinkTest extends TestCase
             $postData,
             ['Accept' =>  'application/json']
         );
-        
+
         $this
             ->seeStatusCode(Response::HTTP_CREATED)
             ->seeHeaderWithRegExp('Location', '#/links/' . env('UUID_REGEX') . '$#');
@@ -151,5 +151,68 @@ class CreateUserLinkTest extends TestCase
 
         $id = $data['data']['id'];
         $this->seeHeaderWithRegExp('Location', "#/links/{$id}$#");
+    }
+
+    public function test_user_links_store_fails_if_category_not_exists()
+    {
+        $user = $this->userFactory();
+        $token = Auth::tokenById($user->id);
+
+        $postData = [
+            'title' => 'Links.app',
+            'url' => 'http://links.app',
+            'category' => '25769c6c-d34d-4bfe-ba98-e0ee856f3e7a',
+        ];
+
+        $this->post(
+            "/user/links?token={$token}",
+            $postData,
+            ['Accept' =>  'application/json']
+        );
+
+        $this->seeStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
+
+        $data = $this->response->getData(true);
+        $this->assertCount(1, $data);
+        $this->assertArrayHasKey('category', $data);
+        $this->assertEquals(
+            ["The selected category is invalid."],
+            $data['category']
+        );
+
+        $this->notSeeInDatabase('links', [
+            'title' => 'Links.app',
+            'url' => 'http://links.app',
+        ]);
+    }
+
+    public function test_user_links_store_fails_if_category_not_belongs_to_user()
+    {
+        $user = $this->userFactory();
+        $token = Auth::tokenById($user->id);
+
+        $user2 = $this->userFactory();
+        $category = $user2->categories->first();
+
+        $postData = [
+            'title' => 'Links.app',
+            'url' => 'http://links.app',
+            'category' => $category->uuid,
+        ];
+
+        $this->post(
+            "/user/links?token={$token}",
+            $postData,
+            ['Accept' =>  'application/json']
+        );
+
+        $this->seeStatusCode(Response::HTTP_NOT_FOUND);
+
+        $this->seeJson([
+            'error' => [
+                'message' => Response::$statusTexts[Response::HTTP_NOT_FOUND],
+                'status' => Response::HTTP_NOT_FOUND,
+            ],
+        ]);
     }
 }

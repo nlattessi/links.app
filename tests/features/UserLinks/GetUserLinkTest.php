@@ -1,3 +1,4 @@
+
 <?php
 
 use Illuminate\Http\Response;
@@ -18,7 +19,7 @@ class GetUserLinkTest extends TestCase
             "/user/links/{$link->uuid}?token={$token}",
             ['Accept' => 'application/json']
         );
-        
+
         $this->seeStatusCode(Response::HTTP_OK);
 
         $body = json_decode($this->response->getContent(), true);

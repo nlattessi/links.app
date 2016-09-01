@@ -12,9 +12,12 @@ class GetUserLinksTest extends TestCase
         $user = $this->userFactory();
         $token = Auth::tokenById($user->id);
 
-        $this
-            ->get("/user/links?token={$token}", ['Accept' => 'application/json'])
-            ->seeStatusCode(Response::HTTP_OK);
+        $this->get(
+            "/user/links?token={$token}",
+            ['Accept' => 'application/json']
+        );
+
+        $this->seeStatusCode(Response::HTTP_OK);
 
         $body = json_decode($this->response->getContent(), true);
         $this->assertArrayHasKey('data', $body);
@@ -36,9 +39,12 @@ class GetUserLinksTest extends TestCase
         $user = $this->userFactory(3);
         $token = Auth::tokenById($user->id);
 
-        $this
-            ->get("/user/links?token={$token}", ['Accept' => 'application/json'])
-            ->seeStatusCode(Response::HTTP_OK);
+        $this->get(
+            "/user/links?token={$token}",
+            ['Accept' => 'application/json']
+        );
+
+        $this->seeStatusCode(Response::HTTP_OK);
 
         $body = json_decode($this->response->getContent(), true);
         $this->assertArrayHasKey('data', $body);
