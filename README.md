@@ -7,10 +7,13 @@
 ### Features roadmap
 * ~~CRUD /links~~
 * ~~CRUD /categories~~
-* Auth
-* UUID
+* ~~Auth~~
+* ~~UUID~~
+* ~~CRUD /user/links~~
+* ~~CRUD /user/categories~~
+
+### Possible extensions
 * Search
 * Tags
 
 ### Doing
-* Auth

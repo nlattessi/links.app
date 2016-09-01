@@ -9,7 +9,7 @@ class Category extends Model
 {
     use Uuids;
 
-    protected $fillable = ['name', 'description'];
+    protected $fillable = ['name'];
 
     public function links()
     {
