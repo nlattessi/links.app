@@ -37,9 +37,9 @@ class UserCategoriesController extends Controller
 
         $this->validateCategory($request);
 
-        $category = Category::create(
-            $this->getCategoryData($request, $user)
-        );
+        $category = $user->categories()->create([
+            'name' => $request->input('name'),
+        ]);
 
         return response()->json(
             $this->item($category, new CategoryTransformer()),
@@ -74,14 +74,6 @@ class UserCategoriesController extends Controller
         $user->categories()->where('uuid', $uuid)->firstOrFail()->delete();
 
         return response(null, Response::HTTP_NO_CONTENT);
-    }
-
-    private  function getCategoryData(Request $request, User $user)
-    {
-        return [
-            'name' => $request->input('name'),
-            'user_id' => $user->id,
-        ];
     }
 
     private function validateCategory(Request $request)
