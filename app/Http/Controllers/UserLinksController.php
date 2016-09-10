@@ -48,9 +48,10 @@ class UserLinksController extends Controller
             $request->input('category')
         );
 
-        $link = $category->links()->create(
-            $this->getLinkData($request, $user)
-        );
+        $link = $category->links()->create([
+            'title' => $request->input('title'),
+            'url' => $request->input('url'),
+        ]);
 
         return response()->json(
             $this->item($link, new LinkTransformer()),
@@ -121,21 +122,7 @@ class UserLinksController extends Controller
 
     private function getCategoryFromUserFilterByUuid(User $user, $uuid)
     {
-        $category = $user->categories->where('uuid', $uuid)->first();
-
-        if (! $category) {
-            throw new ModelNotFoundException();
-        }
-
-        return $category;
-    }
-
-    private function getLinkData(Request $request, User $user)
-    {
-        return [
-            'title' => $request->input('title'),
-            'url' => $request->input('url'),
-        ];
+        return $user->categories()->where('uuid', $uuid)->firstOrFail();
     }
 
     private function validateLink(Request $request)
