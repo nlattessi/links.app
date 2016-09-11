@@ -100,6 +100,11 @@ class HandlerTest extends TestCase
                 'message' => '',
                 'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
             ],
+            [
+                'mock' => \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException::class,
+                'message' => '',
+                'status' => Response::HTTP_UNAUTHORIZED,
+            ],
         ];
 
         foreach ($exceptions as $e) {
