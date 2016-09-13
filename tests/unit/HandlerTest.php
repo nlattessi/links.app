@@ -105,6 +105,11 @@ class HandlerTest extends TestCase
                 'message' => '',
                 'status' => Response::HTTP_UNAUTHORIZED,
             ],
+            [
+                'mock' => \Symfony\Component\HttpKernel\Exception\BadRequestHttpException::class,
+                'message' => '',
+                'status' => Response::HTTP_BAD_REQUEST,
+            ],
         ];
 
         foreach ($exceptions as $e) {
