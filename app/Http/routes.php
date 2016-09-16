@@ -55,6 +55,8 @@ $app->group([
 ], function () use ($app) {
     $app->post('/login', 'AuthController@login');
     $app->post('/register', 'AuthController@register');
+
+    $app->get('/facebook', 'AuthController@facebook');
 });
 
 $app->group([
