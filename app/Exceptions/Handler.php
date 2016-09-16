@@ -86,6 +86,16 @@ class Handler extends ExceptionHandler
                 $response['status'] = Response::HTTP_INTERNAL_SERVER_ERROR;
             }
 
+            if ($e instanceof \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException) {
+                $response['message'] = $e->getMessage();
+                $response['status'] = $e->getStatusCode();
+            }
+
+            if ($e instanceof \Symfony\Component\HttpKernel\Exception\BadRequestHttpException) {
+                $response['message'] = $e->getMessage();
+                $response['status'] = $e->getStatusCode();
+            }
+
             if ($this->isDebugMode()) {
                 $response['debug'] = [
                     'exception' => get_class($e),

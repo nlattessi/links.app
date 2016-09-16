@@ -55,6 +55,7 @@ $app->group([
 ], function () use ($app) {
     $app->post('/login', 'AuthController@login');
     $app->post('/register', 'AuthController@register');
+    $app->get('/refresh', ['middleware' => 'jwt.refresh', function () {}]);
 
     $app->get('/facebook', 'AuthController@facebook');
 });
@@ -64,16 +65,15 @@ $app->group([
     'namespace' => 'App\Http\Controllers',
     'middleware' => [
         'testjwt',
-        'auth:api',
+        // 'auth:api',
+        'jwt.auth',
     ],
 ], function () use ($app, $uuidRegex) {
     $app->get('/', 'UserLinksController@index');
-
     $app->get("/{uuid: ${uuidRegex}}", [
         'as' => 'UserLinks.show',
         'uses' => 'UserLinksController@show',
     ]);
-
     $app->post('/', 'UserLinksController@store');
     $app->patch("/{uuid: ${uuidRegex}}", 'UserLinksController@update');
     $app->delete("/{uuid: ${uuidRegex}}", 'UserLinksController@destroy');
@@ -84,16 +84,15 @@ $app->group([
     'namespace' => 'App\Http\Controllers',
     'middleware' => [
         'testjwt',
-        'auth:api',
+        // 'auth:api',
+        'jwt.auth',
     ],
 ], function () use ($app, $uuidRegex) {
     $app->get('/', 'UserCategoriesController@index');
-
     $app->get("/{uuid: ${uuidRegex}}", [
         'as' => 'userCategories.show',
         'uses' => 'UserCategoriesController@show',
     ]);
-
     $app->post('/', 'UserCategoriesController@store');
     $app->patch("/{uuid: ${uuidRegex}}", 'UserCategoriesController@update');
     $app->delete("/{uuid: ${uuidRegex}}", 'UserCategoriesController@destroy');
