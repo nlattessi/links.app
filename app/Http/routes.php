@@ -56,6 +56,8 @@ $app->group([
     $app->post('/login', 'AuthController@login');
     $app->post('/register', 'AuthController@register');
     $app->get('/refresh', ['middleware' => 'jwt.refresh', function () {}]);
+
+    $app->get('/facebook', 'AuthController@facebook');
 });
 
 $app->group([
