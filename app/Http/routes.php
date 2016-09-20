@@ -58,6 +58,9 @@ $app->group([
     $app->get('/refresh', ['middleware' => 'jwt.refresh', function () {}]);
 
     $app->get('/facebook', 'AuthController@facebook');
+
+    $app->get('/firebase', 'AuthController@firebase');
+
 });
 
 $app->group([
