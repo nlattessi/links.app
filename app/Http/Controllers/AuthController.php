@@ -114,10 +114,65 @@ class AuthController extends Controller
             );
         }
 
-        return response()->json(
-            compact('user'),
-            Response::HTTP_OK
-        );
+        return response()->json([
+            [
+                'error' => [
+                    'message' => 'Error Log in with Facebook.',
+                    'status' => Response::HTTP_UNAUTHORIZED,
+                ],
+            ],
+            Response::HTTP_UNAUTHORIZED
+        ]);
+    }
+
+    public function google(Request $request)
+    {
+        $client_id = '367309930083-53pu80b66ua3jro4fdu0tv8cvsqceqhs.apps.googleusercontent.com';
+        $client_secret = 'nAkaHs7860Nbzsr2zBTmLUek';
+
+        $client = new \Google_Client();
+        $client->setClientId($client_id);
+        $client->setClientSecret($client_secret);
+
+        $accessToken = $request->input('accessToken');
+
+        $ticket = $client->verifyIdToken($accessToken);
+
+        if ($ticket) {
+
+            $user = \App\User::firstOrCreate([
+                'email' => $ticket['email']
+            ]);
+
+            if ($user) {
+                if (! $token = Auth::tokenById($user->id)) {
+                    return response()->json([
+                        [
+                            'error' => [
+                                'message' => 'User not found.',
+                                'status' => Response::HTTP_NOT_FOUND,
+                            ],
+                        ],
+                        Response::HTTP_NOT_FOUND
+                    ]);
+                }
+
+                return response()->json(
+                    compact('token'),
+                    Response::HTTP_OK
+                );
+            }
+        }
+
+        return response()->json([
+            [
+                'error' => [
+                    'message' => 'Error Log in with Google.',
+                    'status' => Response::HTTP_UNAUTHORIZED,
+                ],
+            ],
+            Response::HTTP_UNAUTHORIZED
+        ]);
     }
 
     private function createResponse(Request $request, $statusCode)
