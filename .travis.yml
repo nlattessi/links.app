@@ -17,7 +17,7 @@ deploy:
   provider: heroku
   api_key:
     secure: qZZfsvzONbphs7x1QQjnJrTCd6t6chmUwmumh/MoKsrPgcL6HNIt1lgtPt/OjnKPSJUksZIT8CH2AKsCBpKVm/doPL7IaLu4MTsAi2nt8/yqVFH5sr/RvETNjlDbwG+tbydlscHbeEGeW+pXskOUkqz1sMV5fr1TAz9Ib9WtDdM2ggE8M7kUXkW/m1LSoC+TmvLM7EuK9REnTBMnW8pord0vpX5ClcusYcgAQB5yjvn0OtoaaS4D9iZXRzTrRaCZ3SvL9PR/NS/Ht86z4sy1pnQ1XAWxeFE2IiIqvcyCYXVz7sj9wfI1pvRGQyEU8GQnFDiQz5IeJUnKGairLRnCSjF0IpiNh02ZMJ25z51r0gSsna5m3HdRYC1oEK7Jb94S+jbrmE+ezk07G3Bvlk+HSywM1mudvgH62GZT83KSfUy2s24G9GCgnvKi2DjIIZTKLXEgaFiOXnlog0sVaO518DP3DvYho2KOUcGH3tmRnB//9xbLIwV0nCOQKF0BkH+RBdh78w5iss4QjJ9QHyXulxuzLRF5+kAU3Y35xQG0chyb8GzaD4s1HPhQzk673P/PU/9wdiOd9PRs5i0QR28HPuoC7QZaNBDhKtkHut9xgJJA596hZiPHMG9HCM99lMuDmY0LRZEKo5OKTZklIst4vuf1e+fvJy6FUeS5j5V6bSg=
-  app: dry-shore-86449
+  app: nlattessi-linksapp
   run: php artisan migrate:refresh --seed --force
 branches:
   only:
