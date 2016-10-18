@@ -3,10 +3,13 @@
 namespace App\Transformers;
 
 use App\Category;
+use League\Fractal\ParamBag;
 use League\Fractal\TransformerAbstract;
 
 class CategoryTransformer extends TransformerAbstract
 {
+    private $validParams = ['order']:
+
     protected $availableIncludes = [
         'links'
     ];
@@ -19,8 +22,8 @@ class CategoryTransformer extends TransformerAbstract
         ];
     }
 
-    public function includeLinks(Category $category)
+    public function includeLinks(Category $category, ParamBag $params = null)
     {
-        return $this->collection($category->links, new LinkTransformer());
+        return $this->collection($category->linksByTitle, new LinkTransformer());
     }
 }

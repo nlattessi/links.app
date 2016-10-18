@@ -16,6 +16,16 @@ class Category extends Model
         return $this->hasMany(Link::class);
     }
 
+    public function linksByTitle()
+    {
+        return $this->hasMany(Link::class)->orderBy('title');
+    }
+
+    public function linksByUrl()
+    {
+        return $this->hasMany(Link::class)->orderBy('url');
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

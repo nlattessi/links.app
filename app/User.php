@@ -37,4 +37,9 @@ class User extends Model implements
     {
         return $this->hasMany(Category::class);
     }
+
+    public function categoriesByName()
+    {
+        return $this->hasMany(Category::class)->orderBy('name');
+    }
 }

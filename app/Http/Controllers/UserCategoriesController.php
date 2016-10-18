@@ -16,7 +16,7 @@ class UserCategoriesController extends Controller
         $user = Auth::user();
 
         return $this->collection(
-            $user->categories,
+            $user->categoriesByName,
             new CategoryTransformer()
         );
     }
