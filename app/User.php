@@ -38,8 +38,8 @@ class User extends Model implements
         return $this->hasMany(Category::class);
     }
 
-    public function categoriesByName()
+    public function links()
     {
-        return $this->hasMany(Category::class)->orderBy('name');
+        return $this->hasManyThrough(Link::class, Category::class);
     }
 }

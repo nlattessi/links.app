@@ -11,12 +11,22 @@ use Illuminate\Http\Response;
 
 class UserCategoriesController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
 
+        if ($request->has('order')) {
+            // TODO: Validate sort(array) params
+            preg_match_all('/\(([^\)]+)\)?/', $request->input('order'), $sortArr);
+            list($orderCol, $orderBy) = explode('|', $sortArr[1][0]);
+
+            $categories = $user->categories()
+                ->orderBy($orderCol, $orderBy)
+                ->get();
+        }
+
         return $this->collection(
-            $user->categoriesByName,
+            $categories ?? $user->categories,
             new CategoryTransformer()
         );
     }

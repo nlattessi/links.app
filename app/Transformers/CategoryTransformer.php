@@ -8,7 +8,7 @@ use League\Fractal\TransformerAbstract;
 
 class CategoryTransformer extends TransformerAbstract
 {
-    private $validParams = ['order']:
+    private $validParams = ['order'];
 
     protected $availableIncludes = [
         'links'
@@ -24,6 +24,27 @@ class CategoryTransformer extends TransformerAbstract
 
     public function includeLinks(Category $category, ParamBag $params = null)
     {
-        return $this->collection($category->linksByTitle, new LinkTransformer());
+        if ($params === null) {
+            return $this->collection($category->links, new LinkTransformer());
+        }
+
+        // Optional params validation
+        $usedParams = array_keys(iterator_to_array($params));
+        if ($invalidParams = array_diff($usedParams, $this->validParams)) {
+            throw new \Exception(sprintf(
+                'Invalid param(s): "%s". Valid param(s): "%s"',
+                implode(',', $usedParams),
+                implode(',', $this->validParams)
+            ));
+        }
+
+        // TODO: Validate order params
+        list($orderCol, $orderBy) = $params->get('order');
+
+        $links = $category->links()
+            ->orderBy($orderCol, $orderBy)
+            ->get();
+
+        return $this->collection($links, new LinkTransformer());
     }
 }
