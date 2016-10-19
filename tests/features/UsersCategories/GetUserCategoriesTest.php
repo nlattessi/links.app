@@ -31,6 +31,30 @@ class GetUserCategoriesTest extends TestCase
         }
     }
 
+    public function test_user_categories_show_should_return_a_collection_of_categories_associated_to_the_user_optionally_sorted_by_title_desc()
+    {
+        $user = $this->userFactory();
+        $token = Auth::tokenById($user->id);
+
+        $this->get(
+            "/user/categories?token={$token}&sort(title|desc)",
+            ['Accept' => 'application/json']
+        );
+
+        $this->seeStatusCode(Response::HTTP_OK);
+
+        $body = json_decode($this->response->getContent(), true);
+        $this->assertArrayHasKey('data', $body);
+        $this->assertCount(1, $body['data']);
+
+        foreach ($user->categories as $category) {
+            $this->seeJson([
+                'id' => $category->uuid,
+                'name' => $category->name,
+            ]);
+        }
+    }
+
     public function test_user_categories_show_optionally_includes_links_with_1_category()
     {
         $user = $this->userFactory(1);

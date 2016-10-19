@@ -13,14 +13,22 @@ use Illuminate\Http\Response;
 
 class UserLinksController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
 
-        $links = $this->getLinksFromUser($user);
+        if ($request->has('order')) {
+            // TODO: Validate sort(array) params
+            preg_match_all('/\(([^\)]+)\)?/', $request->input('order'), $sortArr);
+            list($orderCol, $orderBy) = explode('|', $sortArr[1][0]);
+
+            $links = $user->links()
+                ->orderBy($orderCol, $orderBy)
+                ->get();
+        }
 
         return $this->collection(
-            $links,
+            $links ?? $user->links,
             new LinkTransformer()
         );
     }
@@ -100,18 +108,9 @@ class UserLinksController extends Controller
         return response(null, Response::HTTP_NO_CONTENT);
     }
 
-    private function getLinksFromUser(User $user)
-    {
-        return $user->categories->flatMap(function ($category) {
-            return $category->links;
-        });
-    }
-
     private function getLinkFromUserFilterByUuid(User $user, $uuid)
     {
-        $links = $this->getLinksFromUser($user);
-
-        $link = $links->where('uuid', $uuid)->first();
+        $link = $user->links->where('uuid', $uuid)->first();
 
         if (! $link) {
             throw new ModelNotFoundException();

@@ -37,4 +37,9 @@ class User extends Model implements
     {
         return $this->hasMany(Category::class);
     }
+
+    public function links()
+    {
+        return $this->hasManyThrough(Link::class, Category::class);
+    }
 }
